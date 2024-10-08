@@ -102,12 +102,12 @@ const Login = () => {
               </Form>
             )}
           </Formik>
-          <p className="mt-8 font-normal text-center text-title-p text-secondary">
+          {/* <p className="mt-8 font-normal text-center text-title-p text-secondary">
             Don’t have an account?
             <Link to="/sign-up" className="text-[#0D6EFD] underline">
               Sign up
             </Link>
-          </p>
+          </p> */}
         </div>
       </div>
       <Footer />
