@@ -49,7 +49,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
     >
       <div className="flex items-center justify-between border-b border-[#F4F7FE] lg:justify-center mt-2 gap-2 px-6 py-5.5 lg:py-1">
         <NavLink to="/">
-          <p className="text-title-md  font-bold py-5 text-[#3A57E8]">
+          <p className="text-title-md  font-bold py-5 text-[#FF0000]">
             MEDQUEST
           </p>
         </NavLink>
@@ -96,7 +96,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
             </ul>
             <ul className="mb-6 flex flex-col gap-1.5">
               <NavLink
-                to="/topic"
+                to="/question-bank"
                 className={({ isActive }) =>
                   `group relative flex items-center gap-2.5 px-4 py-2 font-semibold rounded-lg duration-300 ease-in-out ${
                     isActive
@@ -106,7 +106,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                 }
               >
                 <CgUserList size={22} />
-                Topics
+                Question Bank
               </NavLink>
             </ul>
             <ul className="mb-6 flex flex-col gap-1.5">

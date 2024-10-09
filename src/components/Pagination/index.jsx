@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types';
-import { GrFormNext, GrFormPrevious } from 'react-icons/gr';
+import PropTypes from "prop-types";
+import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 
 const Pagination = ({
   currentPage,
@@ -13,24 +13,26 @@ const Pagination = ({
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 
   return (
-    <div className='p-4 sm:p-6 xl:p-7.5 flex items-center justify-center'>
+    <div className="p-4 sm:p-6 xl:p-7.5 flex items-center justify-center ">
       <nav>
-        <ul className='flex flex-wrap items-center bg-white rounded-md'>
+        <ul className="flex items-center bg-white rounded-md shadow-md gap-3">
           <li>
             <button
               onClick={onPrevPage}
               disabled={!hasPrev}
-              className='flex h-9 w-9 items-center justify-center rounded-l-md border border-stroke hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:bg-gray'
+              className={`flex items-center justify-center h-10 w-10 rounded-l-md  shadow hover:bg-gray-200 hover:text-blue-600 disabled:cursor-not-allowed disabled:bg-gray-200`}
             >
-              <GrFormPrevious />
+              <GrFormPrevious size={24} />
             </button>
           </li>
-          {pages.map(page => (
+          {pages.map((page) => (
             <li key={page}>
               <button
                 onClick={() => onPageChange(page)}
-                className={`flex items-center justify-center border border-stroke border-l-transparent py-[5px] px-4 font-medium${
-                  page === currentPage ? 'border-primary bg-primary text-white' : ''
+                className={`flex items-center justify-center  shadow py-2 px-4 font-medium${
+                  page === currentPage
+                    ? " border border-[#3182CE] text-[#3182CE]"
+                    : " text-black hover:bg-gray-100"
                 }`}
               >
                 {page}
@@ -41,9 +43,9 @@ const Pagination = ({
             <button
               onClick={onNextPage}
               disabled={!hasNext}
-              className='flex h-9 w-9 items-center justify-center rounded-r-md border border-stroke hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:bg-gray'
+              className={`flex items-center justify-center h-10 w-10 rounded-l-md  shadow hover:bg-gray-200 hover:text-blue-600 disabled:cursor-not-allowed disabled:bg-gray-200`}
             >
-              <GrFormNext />
+              <GrFormNext size={24} />
             </button>
           </li>
         </ul>
@@ -53,13 +55,13 @@ const Pagination = ({
 };
 
 Pagination.propTypes = {
-  currentPage: PropTypes.number,
-  totalPages: PropTypes.number,
-  onNextPage: PropTypes.func,
-  onPrevPage: PropTypes.func,
-  onPageChange: PropTypes.func,
-  hasNext: PropTypes.bool,
-  hasPrev: PropTypes.bool,
+  currentPage: PropTypes.number.isRequired,
+  totalPages: PropTypes.number.isRequired,
+  onNextPage: PropTypes.func.isRequired,
+  onPrevPage: PropTypes.func.isRequired,
+  onPageChange: PropTypes.func.isRequired,
+  hasNext: PropTypes.bool.isRequired,
+  hasPrev: PropTypes.bool.isRequired,
 };
 
 export default Pagination;
