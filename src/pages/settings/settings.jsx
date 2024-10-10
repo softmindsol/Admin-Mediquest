@@ -1,11 +1,10 @@
+import { ErrorMessage, Field, Form, Formik } from "formik";
 import React from "react";
-import DefaultLayout from "../../layouts/DefaultLayout";
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import { NewRegisterSchema } from "../../schema/auth.schema"; // Import the validation schema
-import Button from "../../components/Button";
-import Breadcrumb from "../../components/Breadcrumbs/Breadcrumb";
-import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import Button from "../../components/Button";
+import DefaultLayout from "../../layouts/DefaultLayout";
+import { NewRegisterSchema } from "../../schema/auth.schema";
 import { changePassword, logout } from "../../store/features/auth/auth.service";
 
 const inputFields = [
@@ -33,13 +32,15 @@ const Settings = () => {
     const res = await dispatch(logout());
     console.log("🚀 ~ handleLogout ~ res:", res);
 
-    if (res.type === "logout/fulfilled") navigate("/login");
+    if (res.type === "logout/fulfilled") {
+      navigate("/log-in");
+    }
   };
   return (
     <DefaultLayout>
       <>
-        <div className="flex justify-between items-center mt-19">
-          <div className="text-title-md font-bold text-black-2">Setting</div>
+        <div className="flex items-center justify-between mt-19">
+          <div className="font-bold text-title-md text-black-2">Setting</div>
           <div className="">
             <Button
               onClick={handleLogout}
@@ -60,11 +61,13 @@ const Settings = () => {
               confirmPassword: "",
             }}
             validationSchema={NewRegisterSchema}
-            onSubmit={async (values) => {
-              console.log("Form Submitted Values:", values);
-
+            onSubmit={async (values, { resetForm }) => {
               try {
-                await dispatch(changePassword(values));
+                const res = await dispatch(changePassword(values));
+
+                if (res.type === "changePassword/fulfilled") {
+                  resetForm();
+                }
               } catch (error) {
                 console.log(error);
               }
@@ -116,16 +119,9 @@ const Settings = () => {
             Semester Setting
           </h2>
           <div className="flex justify-center p-3 px-11 py-7 ">
-            <div className="flex justify-between w-1/2 ">
-              
-
-              
-            
-            </div>
+            <div className="flex justify-between w-1/2 "></div>
           </div>
-          <div className=" border-[#E6E9EC] mx-8 mt-4 py-4 text-center text-[14px] text-black-2">
-            
-          </div>
+          <div className=" border-[#E6E9EC] mx-8 mt-4 py-4 text-center text-[14px] text-black-2"></div>
         </div>
       </>
     </DefaultLayout>

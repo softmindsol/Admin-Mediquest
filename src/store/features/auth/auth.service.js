@@ -1,62 +1,11 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
-import { axios, axiosWithoutToken } from "../../../api";
-
-export const registerUser = createAsyncThunk(
-  "registerUser",
+import { apiClient, axiosWithoutToken } from "../../../api/index";
+export const loginAdmin = createAsyncThunk(
+  "loginAdmin",
   async (data, { rejectWithValue }) => {
     try {
-      const response = await axiosWithoutToken.post("/auth/register", data);
-
-      console.log("Hello", response.data);
-
-      toast.success(response?.data?.message);
-      return response.data;
-    } catch (error) {
-      if (error) {
-        toast.error(error?.response?.data?.error);
-        return rejectWithValue(error);
-      }
-    }
-  }
-);
-
-export const resendMail = createAsyncThunk(
-  "resendMail",
-  async (id, { rejectWithValue }) => {
-    try {
-      const response = await axiosWithoutToken.post(`/auth/resend-mail/${id}`);
-      return response.data;
-    } catch (error) {
-      if (error) {
-        return rejectWithValue(error);
-      }
-    }
-  }
-);
-
-export const checkMail = createAsyncThunk(
-  "checkMail",
-  async (id, { rejectWithValue }) => {
-    try {
-      const response = await axiosWithoutToken.get(`/auth/check-email/${id}`);
-
-      console.log(response.data);
-
-      return response.data;
-    } catch (error) {
-      if (error) {
-        return rejectWithValue(error);
-      }
-    }
-  }
-);
-
-export const loginUser = createAsyncThunk(
-  "loginUser",
-  async (data, { rejectWithValue }) => {
-    try {
-      const response = await axiosWithoutToken.post("/auth/login", data);
+      const response = await apiClient.post("/admin/loginAdmin", data);
 
       console.log("Hello", response.data);
 
@@ -75,7 +24,10 @@ export const changePassword = createAsyncThunk(
   "changePassword",
   async (data, { rejectWithValue }) => {
     try {
-      const response = await axios.post("/users/changePassword", data);
+      const response = await axiosWithoutToken.post(
+        "/admin/change-password",
+        data
+      );
 
       toast.success(response?.data?.message);
       return response.data;
@@ -92,9 +44,7 @@ export const logout = createAsyncThunk(
   "logout",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.post("/auth/logout", null, {
-        withCredentials: true,
-      });
+      const response = await axiosWithoutToken.post("/admin/logout");
 
       console.log(response.data);
 
@@ -110,14 +60,17 @@ export const logout = createAsyncThunk(
 );
 
 export const verifyToken = createAsyncThunk(
-  "auth/verifyToken",
+  "verifyToken",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get("/auth/verify-token");
-      return response.data.isLoggedIn;
+      const response = await apiClient.get("/admin/verifyAdminToken");
+      console.log(response?.data?.data?.isLoggedIn);
+
+      return response?.data?.data?.isLoggedIn;
     } catch (error) {
-      console.error("Token verification failed:", error);
+      console.log("Token verification failed:", error);
       return rejectWithValue(error);
     }
   }
 );
+

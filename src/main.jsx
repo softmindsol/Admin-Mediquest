@@ -9,8 +9,7 @@ import store from "./store/index.js";
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <Provider store={store}>
-      <Toaster position="bottom-right" toastOptions={{ duration: 2000 }} />{" "}
-      <App />
+      <Toaster position="top-right" toastOptions={{ duration: 2000 }} /> <App />
     </Provider>
   </StrictMode>
 );

@@ -2,11 +2,11 @@ import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { LoginSchema } from "../../schema/auth.schema"; // Import the validation schema
 import Button from "../../components/Button";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import { useDispatch } from "react-redux";
-import { loginUser } from "../../store/features/auth/auth.service";
+import { loginAdmin } from "../../store/features/auth/auth.service";
 
 const inputFields = [
   {
@@ -49,11 +49,11 @@ const Login = () => {
               setSubmitting(true);
 
               try {
-                const response = await dispatch(loginUser(values));
+                const response = await dispatch(loginAdmin(values));
 
                 console.log(response);
 
-                if (response.type === "loginUser/fulfilled") {
+                if (response.type === "loginAdmin/fulfilled") {
                   navigate("/");
                   resetForm();
                 }
@@ -102,12 +102,6 @@ const Login = () => {
               </Form>
             )}
           </Formik>
-          {/* <p className="mt-8 font-normal text-center text-title-p text-secondary">
-            Don’t have an account?
-            <Link to="/sign-up" className="text-[#0D6EFD] underline">
-              Sign up
-            </Link>
-          </p> */}
         </div>
       </div>
       <Footer />
