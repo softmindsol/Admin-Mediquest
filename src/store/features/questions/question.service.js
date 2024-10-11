@@ -69,7 +69,6 @@ export const getAllQuestions = createAsyncThunk(
   }
 );
 
-
 export const deleteQuestion = createAsyncThunk(
   "deleteQuestion",
   async ({ documentId, questionId }, { rejectWithValue }) => {
@@ -90,8 +89,6 @@ export const deleteQuestion = createAsyncThunk(
     }
   }
 );
-
-
 
 export const getSingleQuestion = createAsyncThunk(
   "getSingleQuestion",
@@ -128,5 +125,3 @@ export const editQuestion = createAsyncThunk(
     }
   }
 );
-
-
