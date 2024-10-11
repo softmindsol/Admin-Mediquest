@@ -26,7 +26,7 @@ const EditQuestions = () => {
     <>
       <DefaultLayout>
         {/* Go Back Button */}
-        <div className="mt-6 flex flex-col items-start gap-3">
+        <div className="flex flex-col items-start gap-3 mt-6">
           <Link
             to="/question-bank"
             className="bg-[#007AFF] text-white font-semibold py-2 px-4 rounded-md"
@@ -36,7 +36,7 @@ const EditQuestions = () => {
         </div>
 
         {/* Navigation Buttons */}
-        <div className="flex justify-center items-center space-x-4 mt-16">
+        <div className="flex items-center justify-center mt-16 space-x-4">
           <button className="px-4 py-3 text-gray-500 bg-white border border-[#E9ECEF] rounded">
             &lt; Prev
           </button>
@@ -49,9 +49,9 @@ const EditQuestions = () => {
         </div>
 
         {/* Dropdowns and Action Buttons */}
-        <div className="flex flex-wrap gap-3 justify-between items-center mt-6 mb-10">
+        <div className="flex flex-wrap items-center justify-between gap-3 mt-6 mb-10">
           {/* Dropdown Selects */}
-          <div className="flex items-center lg:flex-row flex-wrap space-x-2">
+          <div className="flex flex-wrap items-center space-x-2 lg:flex-row">
             <div>
               <label className="block text-[#211C1B] lg:font-bold font-semibold mb-1">
                 Exam Var
@@ -85,7 +85,7 @@ const EditQuestions = () => {
             </button>
             {isDeployed ? (
               <button
-                className="px-6 py-2 text-white bg-red-500 font-semibold rounded-2xl"
+                className="px-6 py-2 font-semibold text-white bg-red-500 rounded-2xl"
                 onClick={() => setIsDeployed(false)}
               >
                 Undeploy
@@ -116,7 +116,7 @@ const EditQuestions = () => {
                 onBlur={formik.handleBlur}
               />
               {formik.touched.text && formik.errors.text && (
-                <span className="text-red-500 text-sm">
+                <span className="text-sm text-red-500">
                   {formik.errors.text}
                 </span>
               )}
@@ -126,7 +126,7 @@ const EditQuestions = () => {
 
         {/* Edit Question Component */}
         <EditQuestion />
-        <div className="relative mt-10 pb-20 px-7">
+        <div className="relative pb-20 mt-10 px-7">
           <form onSubmit={formik.handleSubmit}>
             <div className="mb-6">
               <TextEditor
@@ -141,7 +141,7 @@ const EditQuestions = () => {
                 height={150}
               />
               {formik.touched.text && formik.errors.text && (
-                <span className="text-red-500 text-sm">
+                <span className="text-sm text-red-500">
                   {formik.errors.text}
                 </span>
               )}

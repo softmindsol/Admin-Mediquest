@@ -16,6 +16,10 @@ import { verifyToken } from "./store/features/auth/auth.service";
 import ProtectedRoute from "./components/ProtectedRoute";
 import LoginRoute from "./components/LoginRoute";
 import { ModalProvider } from "./context/modal";
+import EditQuestions from "./pages/editquestions/EditQuestios";
+import NotFound from "./pages/NotFound";
+
+
 function App() {
   const dispatch = useDispatch();
   const isLoggedIn = useSelector((state) => state?.admin?.isLoggedIn);
