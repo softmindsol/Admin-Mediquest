@@ -4,6 +4,7 @@ import {
   Route,
   BrowserRouter as Router,
   Routes,
+  useLocation,
 } from "react-router-dom";
 import Login from "./pages/authentication/Login";
 import NotFound from "./pages/NotFound";
@@ -14,10 +15,10 @@ import QuestionBank from "./pages/questionbank/QuestionBank";
 import { useDispatch, useSelector } from "react-redux";
 import { verifyToken } from "./store/features/auth/auth.service";
 import ProtectedRoute from "./components/ProtectedRoute";
+import LoginRoute from "./components/LoginRoute";
 function App() {
   const dispatch = useDispatch();
   const isLoggedIn = useSelector((state) => state?.admin?.isLoggedIn);
-  console.log("🚀 ~ App ~ isLoggedIn:", isLoggedIn);
 
   useEffect(() => {
     if (!isLoggedIn) {
@@ -30,7 +31,11 @@ function App() {
       <Routes>
         <Route
           path="/log-in"
-          element={isLoggedIn ? <Navigate to="/" replace /> : <Login />}
+          element={
+            <LoginRoute>
+              <Login />
+            </LoginRoute>
+          }
         />
         <Route
           path="/"

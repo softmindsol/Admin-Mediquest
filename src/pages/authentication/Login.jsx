@@ -45,13 +45,10 @@ const Login = () => {
             }}
             validationSchema={LoginSchema}
             onSubmit={async (values, { setSubmitting, resetForm }) => {
-              console.log("Form Submitted Values:", values);
               setSubmitting(true);
 
               try {
                 const response = await dispatch(loginAdmin(values));
-
-                console.log(response);
 
                 if (response.type === "loginAdmin/fulfilled") {
                   navigate("/");
