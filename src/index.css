@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Remove the border of the toolbar */
+.ql-toolbar.ql-snow {
+  border-bottom: 1px solid #0E1747 !important;
+  border-top-right-radius: 16px !important;
+  border-top-left-radius: 16px;
+}
+
+/* Remove the border of the editor container */
+.ql-container.ql-snow {
+  border: transparent !important;
+}

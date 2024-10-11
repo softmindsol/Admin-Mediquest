@@ -3,6 +3,7 @@ import { FaRegEdit } from "react-icons/fa";
 import { GrEdit } from "react-icons/gr";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import Pagination from "../Pagination";
+import { Link } from "react-router-dom";
 
 // Updated columns based on the screenshot design
 const columns = [
@@ -120,12 +121,13 @@ const Table = () => {
               ))}
               <td className="flex justify-center items-center px-6 py-4 space-x-2">
                 <div className="flex border border-[#EEEEEE] rounded">
-                  <button
+                  <Link
+                    to="/edit-question"
                     // onClick={openEditModal}
                     className="font-medium cursor-pointer text-[#282F5A] p-2 rounded-full hover:bg-[#282F5A1F] transition-all duration-300"
                   >
                     <GrEdit size={20} className="text-[#ff9a69]" />
-                  </button>
+                  </Link>
                   <button
                     // onClick={openDeleteModal}
                     className="font-medium cursor-pointer text-red-600 p-2 rounded-full hover:bg-red-100 transition-all duration-300"
