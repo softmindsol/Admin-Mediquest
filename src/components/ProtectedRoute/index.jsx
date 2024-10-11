@@ -10,10 +10,6 @@ const ProtectedRoute = ({ children }) => {
 
   if (isLoading) return <Loader />;
 
-  if (!isLoggedIn) {
-    return <Navigate to="/log-in" state={{ from: location }} replace />;
-  }
-
   if (isLoggedIn && pathname === "/log-in") {
     return <Navigate to="/" replace />;
   }

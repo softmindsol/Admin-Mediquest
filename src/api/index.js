@@ -24,7 +24,7 @@ axiosWithoutToken.interceptors.response.use(
 
       try {
         const response = await axiosWithoutToken.post(
-          "/refreshAccessToken",
+          "/admin/refresh-access-token",
           {},
           { withCredentials: true }
         );
