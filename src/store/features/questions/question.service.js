@@ -92,3 +92,41 @@ export const deleteQuestion = createAsyncThunk(
 );
 
 
+
+export const getSingleQuestion = createAsyncThunk(
+  "getSingleQuestion",
+  async ({ documentId, questionId }, { rejectWithValue }) => {
+    try {
+      const response = await axiosWithoutToken.patch(
+        `/questions/get-single-question/${documentId}/${questionId}`
+      );
+      console.log(response.data);
+      return response?.data;
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.response?.data?.error);
+      return rejectWithValue(error);
+    }
+  }
+);
+
+export const editQuestion = createAsyncThunk(
+  "editQuestion",
+  async ({ documentId, questionId, data }, { rejectWithValue }) => {
+    try {
+      const response = await axiosWithoutToken.patch(
+        `/questions/update-question/${documentId}/${questionId}`,
+        data
+      );
+      toast.success(response?.data?.message);
+      console.log(response.data);
+      return response?.data;
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.response?.data?.error);
+      return rejectWithValue(error);
+    }
+  }
+);
+
+
