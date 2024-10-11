@@ -7,8 +7,6 @@ export const loginAdmin = createAsyncThunk(
     try {
       const response = await apiClient.post("/admin/loginAdmin", data);
 
-      console.log("Hello", response.data);
-
       toast.success(response?.data?.message);
       return response.data;
     } catch (error) {
@@ -46,8 +44,6 @@ export const logout = createAsyncThunk(
     try {
       const response = await axiosWithoutToken.post("/admin/logout");
 
-      console.log(response.data);
-
       toast.success(response?.data?.message);
       return response.data;
     } catch (error) {
@@ -64,7 +60,6 @@ export const verifyToken = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await apiClient.get("/admin/verifyAdminToken");
-      console.log(response?.data?.data?.isLoggedIn);
 
       return response?.data?.data?.isLoggedIn;
     } catch (error) {
