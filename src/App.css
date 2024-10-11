@@ -40,3 +40,13 @@
 .read-the-docs {
   color: #888;
 }
+/* Remove the border of the toolbar */
+.ql-toolbar.ql-snow {
+    border: transparent !important;
+}
+
+/* Remove the border of the editor container */
+.ql-toolbar.ql-snow {  
+  border: none !important;
+  border: transparent !important;
+}

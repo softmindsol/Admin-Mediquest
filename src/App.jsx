@@ -7,7 +7,6 @@ import {
   useLocation,
 } from "react-router-dom";
 import Login from "./pages/authentication/Login";
-import NotFound from "./pages/NotFound";
 import Home from "./pages/Home/Home";
 import Settings from "./pages/settings/settings";
 
@@ -64,6 +63,8 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        <Route path="/edit-question" element={<EditQuestions />} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>
