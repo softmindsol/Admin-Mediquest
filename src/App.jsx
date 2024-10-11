@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { verifyToken } from "./store/features/auth/auth.service";
 import ProtectedRoute from "./components/ProtectedRoute";
 import LoginRoute from "./components/LoginRoute";
+import { ModalProvider } from "./context/modal";
 function App() {
   const dispatch = useDispatch();
   const isLoggedIn = useSelector((state) => state?.admin?.isLoggedIn);
@@ -49,7 +50,9 @@ function App() {
           path="/question-bank"
           element={
             <ProtectedRoute>
-              <QuestionBank />
+              <ModalProvider>
+                <QuestionBank />
+              </ModalProvider>
             </ProtectedRoute>
           }
         />

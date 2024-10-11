@@ -68,3 +68,27 @@ export const getAllQuestions = createAsyncThunk(
     }
   }
 );
+
+
+export const deleteQuestion = createAsyncThunk(
+  "deleteQuestion",
+  async ({ documentId, questionId }, { rejectWithValue }) => {
+    console.log("Hello from delete request", documentId, questionId);
+
+    try {
+      const response = await axiosWithoutToken.delete(
+        `/questions/delete-question/${documentId}/${questionId}`
+      );
+      toast.success(response?.data?.message);
+      console.log(response.data);
+
+      return response?.data?.data;
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.response?.data?.error);
+      return rejectWithValue(error);
+    }
+  }
+);
+
+

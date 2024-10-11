@@ -2,8 +2,15 @@ import React from "react";
 import { GrEdit } from "react-icons/gr";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import Pagination from "../Pagination";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Loader from "../Loader";
+import { useModal } from "../../context/modal";
+import WarningModal from "../Modal/WarningModal";
+import Modal from "../modal";
+import {
+  deleteQuestion,
+  getAllQuestions,
+} from "../../store/features/questions/question.service";
 
 // Updated columns based on the screenshot design
 const columns = [
@@ -15,11 +22,29 @@ const columns = [
 ];
 
 const Table = ({ setParams, params }) => {
+  const dispatch = useDispatch();
   const { questions: data, isLoading } = useSelector(
     (state) => state?.questions
   );
 
+  const { openModal, closeModal } = useModal();
+
+  const openWarningModal = (documentId, questionId) => {
+    openModal(
+      <WarningModal
+        onClick={async () => {
+          await dispatch(deleteQuestion({ documentId, questionId }));
+          dispatch(getAllQuestions());
+          closeModal();
+        }}
+        closeModal={closeModal}
+        description="This will delete the question?"
+      />
+    );
+  };
+
   const { questions = [], totalPage: totalPages = 0 } = data || {};
+  console.log("🚀 ~ Table ~ questions:", questions);
 
   const handlePageChange = (newPage) => {
     setParams({ ...params, page: newPage });
@@ -74,7 +99,9 @@ const Table = ({ setParams, params }) => {
                         <GrEdit size={20} className="text-[#ff9a69]" />
                       </button>
                       <button
-                        // onClick={openDeleteModal}
+                        onClick={() =>
+                          openWarningModal(row.documentId, row.questionId)
+                        }
                         className="p-2 font-medium text-red-600 transition-all duration-300 rounded-full cursor-pointer hover:bg-red-100"
                       >
                         <RiDeleteBin6Line
@@ -94,7 +121,7 @@ const Table = ({ setParams, params }) => {
               </tr>
             )
           ) : (
-            <div>
+            <div className="lg:w-[70vw] flex justify-center">
               <Loader />
             </div>
           )}
@@ -111,6 +138,8 @@ const Table = ({ setParams, params }) => {
           hasPrev={params.page > 1}
         />
       </div>
+
+      <Modal />
     </div>
   );
 };
