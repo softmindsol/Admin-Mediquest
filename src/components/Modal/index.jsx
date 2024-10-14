@@ -11,7 +11,6 @@ const Modal = () => {
         closeModal();
       }
     };
-
     document.addEventListener("mousedown", handler);
 
     return () => {
