@@ -127,7 +127,7 @@ const Table = ({ setParams, params }) => {
               </tr>
             )
           ) : (
-            <tr className="lg:w-[70vw] flex justify-center">
+            <tr className="">
               <td>
                 <Loader />
               </td>

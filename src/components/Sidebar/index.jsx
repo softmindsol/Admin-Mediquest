@@ -59,7 +59,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
           onClick={() => setSidebarOpen(!sidebarOpen)}
           aria-controls="sidebar"
           aria-expanded={sidebarOpen}
-          className="block lg:hidden text-black"
+          className="block text-black lg:hidden"
         >
           <svg
             className="fill-current"
@@ -76,8 +76,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
           </svg>
         </button>
       </div>
-      <div className="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear">
-        <nav className="mt-5 py-4 px-4 lg:mt-9 lg:px-6">
+      <div className="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar">
+        <nav className="px-4 py-4 mt-5 lg:mt-9 lg:px-6">
           <div>
             <ul className="mb-5 flex flex-col gap-1.5">
               <NavLink
@@ -109,6 +109,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                 Question Bank
               </NavLink>
             </ul>
+
             <ul className="mb-6 flex flex-col gap-1.5">
               <NavLink
                 to="/settings"

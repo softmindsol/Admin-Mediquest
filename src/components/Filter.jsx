@@ -30,7 +30,7 @@ const Filter = ({ params, setParams }) => {
         onChange={handleChange}
         className="border border-[#EEEEEE] focus:outline-none text-[14px] font-bold text-[#211C1B] bg-white rounded px-4 py-3"
       >
-        <option value="">Select topic</option>
+        <option value="">Topic</option>
         <option value="Biochimie">Biochimie</option>
       </select>
 
@@ -40,7 +40,7 @@ const Filter = ({ params, setParams }) => {
         onChange={handleChange}
         className="border border-[#EEEEEE] focus:outline-none text-[14px] font-bold text-[#211C1B] bg-white rounded px-4 py-3"
       >
-        <option value="">Select semester</option>
+        <option value="">Semester</option>
         {Array.from({ length: 10 }, (_, i) => (
           <option key={i + 1} value={`S${i + 1}`}>
             S{i + 1}
@@ -54,7 +54,7 @@ const Filter = ({ params, setParams }) => {
         onChange={handleChange}
         className="border border-[#EEEEEE] focus:outline-none text-[14px] font-bold text-[#211C1B] bg-white rounded px-4 py-3"
       >
-        <option value="">Select City</option>
+        <option value="">City</option>
         <option value="Rabat">Rabat</option>
       </select>
 
@@ -80,7 +80,7 @@ const Filter = ({ params, setParams }) => {
         onChange={handleChange}
         className="border border-[#EEEEEE] focus:outline-none text-[14px] font-bold text-[#211C1B] bg-white rounded px-4 py-3"
       >
-        <option value="">Select EV</option>
+        <option value="">EV</option>
         {Array.from({ length: 10 }, (_, i) => (
           <option key={i + 1} value={i + 1}>
             {i + 1}
