@@ -1,8 +1,6 @@
 import React from "react";
-import Breadcrumb from "../../components/Breadcrumbs/Breadcrumb";
-import DefaultLayout from "../../layouts/DefaultLayout";
-import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import DefaultLayout from "../../layouts/DefaultLayout";
 import { uploadQuestions } from "../../store/features/questions/question.service";
 
 const Home = () => {
@@ -15,13 +13,14 @@ const Home = () => {
       reader.onload = async (e) => {
         try {
           const json = JSON.parse(e.target.result);
-          const formData = new FormData();
-          formData.append(
-            "question",
-            new Blob([JSON.stringify(json)], { type: "application/json" }),
-            file.name
-          );
-          await dispatch(uploadQuestions(formData));
+          console.log("🚀 ~ reader.onload= ~ json:", json);
+          // const formData = new FormData();
+          // formData.append(
+          //   "question",
+          //   new Blob([JSON.stringify(json)], { type: "application/json" }),
+          //   file.name
+          // );
+          await dispatch(uploadQuestions(json));
         } catch (err) {
           console.error("Invalid JSON file", err);
         }

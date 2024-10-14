@@ -25,19 +25,19 @@ const QuestionBank = () => {
 
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
-
     if (file) {
       const reader = new FileReader();
       reader.onload = async (e) => {
         try {
           const json = JSON.parse(e.target.result);
-          const formData = new FormData();
-          formData.append(
-            "question",
-            new Blob([JSON.stringify(json)], { type: "application/json" }),
-            file.name
-          );
-          await dispatch(uploadQuestions(formData));
+          console.log("🚀 ~ reader.onload= ~ json:", json);
+          // const formData = new FormData();
+          // formData.append(
+          //   "question",
+          //   new Blob([JSON.stringify(json)], { type: "application/json" }),
+          //   file.name
+          // );
+          await dispatch(uploadQuestions(json));
         } catch (err) {
           console.error("Invalid JSON file", err);
         }

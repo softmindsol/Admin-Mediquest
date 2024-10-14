@@ -68,7 +68,14 @@ function App() {
           }
         />
 
-        <Route path="/edit-question" element={<EditQuestions />} />
+        <Route
+          path="/edit-question/:documentId"
+          element={
+            <ProtectedRoute>
+              <EditQuestions />
+            </ProtectedRoute>
+          }
+        />
 
         <Route path="*" element={<NotFound />} />
       </Routes>
