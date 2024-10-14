@@ -2,7 +2,6 @@ import React from "react";
 import TextEditor from "./TextEditor"; // Import your TextEditor component
 
 const EditQuestion = () => {
-  // Array of answers (modify as needed)
   const answers = [
     { id: 1, placeholder: "I am your reach text editor." },
     { id: 2, placeholder: "I am your reach text editor." },
@@ -11,19 +10,16 @@ const EditQuestion = () => {
   ];
 
   return (
-    <div className="mt-20 p-6 rounded-md">
-      {/* Titles for the columns */}
-      <div className="flex space-x-4 mb-4">
+    <div className="p-6 mt-20 rounded-md">
+      <div className="flex mb-4 space-x-4">
         <div className="w-2/12 text-[#464E5F] font-semibold">
           Correct Answer*
         </div>
         <div className="w-8/12 text-[#464E5F] font-semibold">Answer</div>
       </div>
 
-      {/* Radio buttons and TextEditor components */}
       {answers.map((answer, index) => (
-        <div key={answer.id} className="flex space-x-4 items-center mb-8">
-          {/* Radio Button */}
+        <div key={answer.id} className="flex items-center mb-8 space-x-4">
           <div className="w-2/12">
             <input
               type="radio"
@@ -32,9 +28,7 @@ const EditQuestion = () => {
               value={answer.id}
             />
           </div>
-
-          {/* Text Editor Component */}
-          <div className="w-8/12  gap-2">
+          <div className="w-8/12 gap-2">
             <TextEditor
               name={`answer${index}`}
               // label={`Answer ${index + 1}`}
@@ -42,7 +36,8 @@ const EditQuestion = () => {
               placeholder={answer.placeholder}
               className="w-full"
               height={120}
-z            />
+              z
+            />
           </div>
         </div>
       ))}

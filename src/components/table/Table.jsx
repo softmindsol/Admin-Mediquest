@@ -11,6 +11,7 @@ import {
   deleteQuestion,
   getAllQuestions,
 } from "../../store/features/questions/question.service";
+import { Link } from "react-router-dom";
 
 // Updated columns based on the screenshot design
 const columns = [
@@ -26,6 +27,9 @@ const Table = ({ setParams, params }) => {
   const { questions: data, isLoading } = useSelector(
     (state) => state?.questions
   );
+
+  const state = useSelector((state) => state?.questions);
+  console.log(state);
 
   const { openModal, closeModal } = useModal();
 
@@ -67,40 +71,42 @@ const Table = ({ setParams, params }) => {
         </thead>
         <tbody className="text-[#6B7280] text-[14px]">
           {!isLoading ? (
-            questions && questions.length > 0 ? (
-              questions.map((row) => (
+            questions && questions?.length > 0 ? (
+              questions?.map((row) => (
                 <tr
-                  key={row._id}
+                  key={row?._id}
                   className="bg-white border-b border-[#F0F3F7] hover:bg-gray-50 transition-all duration-200"
                 >
                   <td className="px-6 py-3 text-black text-[12px]">
-                    {row._id}
+                    {row?._id}
                   </td>
                   <td className="px-6 py-3 text-black text-[12px]">
-                    {row.content.questions.question}
+                    {row?.content?.questions?.question}
                   </td>
                   <td className="px-6 py-3 text-black text-[12px]">
                     {new Date(
-                      row.content.questions.createdAt
+                      row?.content?.questions?.createdAt
                     ).toLocaleDateString()}
                   </td>
                   <td className="px-6 py-3 text-black text-[12px]">
-                    {row.metadata.topic}
+                    {row?.metadata?.topic}
                   </td>
                   <td className="px-6 py-3 text-black text-[12px]">
-                    {row.content.questions.deploy ? "Yes" : "No"}
+                    {row?.content?.questions?.deploy ? "Yes" : "No"}
                   </td>
                   <td className="flex items-center justify-center px-6 py-4 space-x-2">
                     <div className="flex border border-[#EEEEEE] rounded">
-                      <button
-                        // onClick={openEditModal}
-                        className="font-medium cursor-pointer text-[#282F5A] p-2 rounded-full hover:bg-[#282F5A1F] transition-all duration-300"
-                      >
-                        <GrEdit size={20} className="text-[#ff9a69]" />
-                      </button>
+                      <Link to={`/edit-question/${row?.documentId}`}>
+                        <button
+                          // onClick={openEditModal}
+                          className="font-medium cursor-pointer text-[#282F5A] p-2 rounded-full hover:bg-[#282F5A1F] transition-all duration-300"
+                        >
+                          <GrEdit size={20} className="text-[#ff9a69]" />
+                        </button>
+                      </Link>
                       <button
                         onClick={() =>
-                          openWarningModal(row.documentId, row.questionId)
+                          openWarningModal(row?.documentId, row?.questionId)
                         }
                         className="p-2 font-medium text-red-600 transition-all duration-300 rounded-full cursor-pointer hover:bg-red-100"
                       >
