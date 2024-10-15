@@ -107,24 +107,25 @@ export const deleteQuestion = createAsyncThunk(
 //   }
 // );
 
-// export const editQuestion = createAsyncThunk(
-//   "editQuestion",
-//   async ({ documentId, questionId, data }, { rejectWithValue }) => {
-//     try {
-//       const response = await axiosWithoutToken.patch(
-//         `/questions/update-question/${documentId}/${questionId}`,
-//         data
-//       );
-//       toast.success(response?.data?.message);
-//       console.log(response.data);
-//       return response?.data;
-//     } catch (error) {
-//       console.log(error);
-//       toast.error(error?.response?.data?.error);
-//       return rejectWithValue(error);
-//     }
-//   }
-// );
+export const editQuestion = createAsyncThunk(
+  "editQuestion",
+  async ({ documentId, questionId, data }, { rejectWithValue }) => {
+    console.log("🚀 ~ data:", data);
+    try {
+      const response = await axiosWithoutToken.patch(
+        `/questions/update-question/${documentId}/${questionId}`,
+        data
+      );
+      toast.success(response?.data?.message);
+      console.log(response.data);
+      return response?.data;
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.response?.data?.error);
+      return rejectWithValue(error);
+    }
+  }
+);
 
 export const getDocumentQuestion = createAsyncThunk(
   "getDocumentQuestions",
@@ -146,21 +147,15 @@ export const getDocumentQuestion = createAsyncThunk(
   }
 );
 
-
-
-
 export const getQuestion = createAsyncThunk(
   "getQuestion",
-  async ({ documentId, questionId, left, pageNo }, { rejectWithValue }) => {
-    console.log("🚀 ~ left:", left);
+  async ({ documentId, questionId, prev, pageNo }, { rejectWithValue }) => {
+    console.log("🚀 ~ left:", prev);
     console.log("🚀 ~ pageNo:", pageNo);
     console.log("🚀 ~ pageNo:", typeof pageNo);
-
-    console.log("🚀 ~ questionId:", questionId);
-    console.log("🚀 ~ documentId:", documentId);
     try {
       const response = await axiosWithoutToken.get(
-        `/questions/get-question/${documentId}/${questionId}?left=${left}`
+        `/questions/get-question/${documentId}/${questionId}?left=${prev}&pageNo=${pageNo}`
       );
 
       console.log(response?.data?.data);
@@ -172,3 +167,7 @@ export const getQuestion = createAsyncThunk(
     }
   }
 );
+
+
+
+

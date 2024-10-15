@@ -81,8 +81,13 @@ const Table = ({ setParams, params }) => {
                     {row?._id}
                   </td>
                   <td className="px-6 py-3 text-black text-[12px]">
-                    {row?.content?.questions?.question}
+                    <p
+                      dangerouslySetInnerHTML={{
+                        __html: row?.content?.questions?.question,
+                      }}
+                    />
                   </td>
+
                   <td className="px-6 py-3 text-black text-[12px]">
                     {new Date(
                       row?.content?.questions?.createdAt

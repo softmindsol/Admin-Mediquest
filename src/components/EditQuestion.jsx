@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import TextEditor from "./TextEditor"; // Import your TextEditor component
+import React, { useEffect } from "react";
+import TextEditor from "./TextEditor";
 import { useSelector } from "react-redux";
 
 const EditQuestion = ({
@@ -12,18 +12,16 @@ const EditQuestion = ({
     useSelector((state) => state?.questions?.documentQuestions) || {};
 
   const { options = [], correct_answers = [] } = questions;
-  console.log("🚀 ~ EditQuestion ~ options:", options);
 
-  // Initialize state with existing options and correct answers
   useEffect(() => {
-    setModifiedOptions([...options]); // Copy initial options
-    setSelectedCorrectAnswers([...correct_answers]); // Copy initial correct answers
+    setModifiedOptions([...options]);
+    setSelectedCorrectAnswers([...correct_answers]);
   }, [options, correct_answers]);
 
   const handleOptionChange = (index, content) => {
     setModifiedOptions((prevOptions) => {
       const updatedOptions = [...prevOptions];
-      updatedOptions[index] = content; // Update the specific option
+      updatedOptions[index] = content;
       return updatedOptions;
     });
   };
@@ -31,8 +29,8 @@ const EditQuestion = ({
   const handleCorrectAnswerChange = (id) => {
     setSelectedCorrectAnswers((prevAnswers) => {
       return prevAnswers.includes(id)
-        ? prevAnswers.filter((answer) => answer !== id) // Remove if already included
-        : [...prevAnswers, id]; // Add if not included
+        ? prevAnswers.filter((answer) => answer !== id)
+        : [...prevAnswers, id];
     });
   };
 
@@ -46,7 +44,7 @@ const EditQuestion = ({
       </div>
 
       {modifiedOptions.map((option, index) => {
-        const id = String.fromCharCode(65 + index); // Incremental ID for each answer
+        const id = String.fromCharCode(65 + index);
         return (
           <div key={id} className="flex items-center mb-8 space-x-4">
             <div className="w-2/12">
