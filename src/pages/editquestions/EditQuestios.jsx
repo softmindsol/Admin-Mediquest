@@ -29,6 +29,8 @@ const EditQuestions = () => {
    const pageNo = currentQuestion;
    console.log("🚀 ~ }=useSelector ~ pageNo:", pageNo);
 
+   const [isDeployed, setIsDeployed] = useState(questions?.deploy);
+
    useEffect(() => {
      const fetchQuestion = async () => {
        const left = searchParams.get("left") || "";
