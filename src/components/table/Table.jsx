@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Loader from "../Loader";
 import { useModal } from "../../context/modal";
 import WarningModal from "../Modal/WarningModal";
-// import Modal from "../modal/index";
+import Modal from "../modal/index";
 import {
   deleteQuestion,
   getAllQuestions,
@@ -31,21 +31,21 @@ const Table = ({ setParams, params }) => {
   const state = useSelector((state) => state?.questions);
   console.log(state);
 
-  // const { openModal, closeModal } = useModal();
+  const { openModal, closeModal } = useModal();
 
-  // const openWarningModal = (documentId, questionId) => {
-  //   openModal(
-  //     <WarningModal
-  //       onClick={async () => {
-  //         await dispatch(deleteQuestion({ documentId, questionId }));
-  //         dispatch(getAllQuestions());
-  //         closeModal();
-  //       }}
-  //       closeModal={closeModal}
-  //       description="This will delete the question?"
-  //     />
-  //   );
-  // };
+  const openWarningModal = (documentId, questionId) => {
+    openModal(
+      <WarningModal
+        onClick={async () => {
+          await dispatch(deleteQuestion({ documentId, questionId }));
+          dispatch(getAllQuestions());
+          closeModal();
+        }}
+        closeModal={closeModal}
+        description="This will delete the question?"
+      />
+    );
+  };
 
   const { questions = [], totalPage: totalPages = 0 } = data || {};
   console.log("🚀 ~ Table ~ questions:", questions);
@@ -154,7 +154,7 @@ const Table = ({ setParams, params }) => {
         />
       </div>
 
-      {/* <Modal /> */}
+      <Modal />
     </div>
   );
 };

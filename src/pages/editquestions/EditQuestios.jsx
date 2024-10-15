@@ -16,7 +16,7 @@ const EditQuestions = () => {
   const [selectedCorrectAnswers, setSelectedCorrectAnswers] = useState([]);
   const {
     totalQuestions = 0,
-    currentQuestion = undefined,
+    currentQuestion = "",
     questions = {},
     metadata: metaData = {},
   } = useSelector((state) => state?.questions?.documentQuestions) || {};
@@ -24,16 +24,22 @@ const EditQuestions = () => {
   const dispatch = useDispatch();
   const { documentId, questionId } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
-  const prev = searchParams.get("left") || "";
-  const [pageNo, setPageNo] = useState(1);
+  const [pageNo, setPageNo] = useState();
+  const [searchPageNo, setSearchPageNo] = useState();
   const [isDeployed, setIsDeployed] = useState(questions?.deploy);
 
   useEffect(() => {
     const fetchQuestion = async () => {
       try {
         const res = await dispatch(
-          getQuestion({ documentId, questionId, pageNo, prev })
+          getQuestion({
+            documentId,
+            questionId,
+            pageNo: searchParams.get("pageNo"),
+          })
         );
+
+        setSearchPageNo(res?.payload?.pageNo);
         console.log("API Response: ", res);
       } catch (error) {
         console.error("Error fetching question: ", error);
@@ -43,7 +49,7 @@ const EditQuestions = () => {
     if (documentId && questionId) {
       fetchQuestion();
     }
-  }, [dispatch, documentId, questionId, pageNo, prev]);
+  }, [dispatch, documentId, questionId, pageNo]);
 
   useEffect(() => {
     if (questions && questions.deploy !== undefined) {
@@ -52,16 +58,18 @@ const EditQuestions = () => {
   }, [questions]);
 
   const handlePrev = () => {
-    if (pageNo > 1) {
-      setPageNo((prev) => prev - 1);
-      setSearchParams({ left: "left", pageNo: pageNo - 1 });
+    if (searchPageNo > 1) {
+      setSearchPageNo((prev) => prev - 1);
+      setPageNo(Number(searchPageNo) - 1);
+      setSearchParams({ pageNo: searchPageNo - 1 });
     }
   };
 
   const handleNext = () => {
-    if (pageNo < totalQuestions) {
-      setPageNo((prev) => prev + 1);
-      setSearchParams({ left: "", pageNo: pageNo + 1 });
+    if (searchPageNo < totalQuestions) {
+      setSearchPageNo((prev) => prev + 1);
+      setSearchParams({ pageNo: searchPageNo + 1 });
+      setPageNo(Number(searchPageNo) + 1);
     }
   };
 
@@ -116,17 +124,17 @@ const EditQuestions = () => {
         <button
           onClick={handlePrev}
           className="px-4 py-3 text-gray-500 bg-white border border-[#E9ECEF] rounded"
-          disabled={pageNo <= 1}
+          disabled={searchPageNo <= 1}
         >
           &lt; Prev
         </button>
         <div className="px-4 py-3 bg-[#3A57E8] text-white border border-[#7749F8] rounded">
-          {pageNo} of {totalQuestions}
+          {searchPageNo} of {totalQuestions}
         </div>
         <button
           onClick={handleNext}
           className="px-4 py-3 text-gray-500 bg-white border border-[#E9ECEF] rounded"
-          disabled={pageNo >= totalQuestions}
+          disabled={searchPageNo >= totalQuestions}
         >
           Next &gt;
         </button>

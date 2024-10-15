@@ -149,13 +149,19 @@ export const getDocumentQuestion = createAsyncThunk(
 
 export const getQuestion = createAsyncThunk(
   "getQuestion",
-  async ({ documentId, questionId, prev, pageNo }, { rejectWithValue }) => {
-    console.log("🚀 ~ left:", prev);
-    console.log("🚀 ~ pageNo:", pageNo);
-    console.log("🚀 ~ pageNo:", typeof pageNo);
+  async ({ documentId, questionId, pageNo }, { rejectWithValue }) => {
+    const params = {};
+
+    if (pageNo) {
+      params.pageNo = pageNo;
+    }
+
     try {
       const response = await axiosWithoutToken.get(
-        `/questions/get-question/${documentId}/${questionId}?left=${prev}&pageNo=${pageNo}`
+        `/questions/get-question/${documentId}/${questionId}`,
+        {
+          params,
+        }
       );
 
       console.log(response?.data?.data);
