@@ -1,13 +1,38 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import TextEditor from "./TextEditor"; // Import your TextEditor component
+import { useSelector } from "react-redux";
 
 const EditQuestion = () => {
-  const answers = [
-    { id: 1, placeholder: "I am your reach text editor." },
-    { id: 2, placeholder: "I am your reach text editor." },
-    { id: 3, placeholder: "I am your reach text editor." },
-    { id: 4, placeholder: "I am your reach text editor." },
-  ];
+  const { questions = {} } =
+    useSelector((state) => state?.questions?.documentQuestions) || {};
+
+  const { options = [], correct_answers = [] } = questions;
+
+  // State for modified options and correct answers
+  const [modifiedOptions, setModifiedOptions] = useState([]);
+  const [selectedCorrectAnswers, setSelectedCorrectAnswers] = useState([]);
+
+  // Initialize state with existing options and correct answers
+  useEffect(() => {
+    setModifiedOptions([...options]); // Copy initial options
+    setSelectedCorrectAnswers([...correct_answers]); // Copy initial correct answers
+  }, [options, correct_answers]);
+
+  const handleOptionChange = (index, content) => {
+    setModifiedOptions((prevOptions) => {
+      const updatedOptions = [...prevOptions];
+      updatedOptions[index] = content; // Update the specific option
+      return updatedOptions;
+    });
+  };
+
+  const handleCorrectAnswerChange = (id) => {
+    setSelectedCorrectAnswers((prevAnswers) => {
+      return prevAnswers.includes(id)
+        ? prevAnswers.filter((answer) => answer !== id) // Remove if already included
+        : [...prevAnswers, id]; // Add if not included
+    });
+  };
 
   return (
     <div className="p-6 mt-20 rounded-md">
@@ -18,29 +43,34 @@ const EditQuestion = () => {
         <div className="w-8/12 text-[#464E5F] font-semibold">Answer</div>
       </div>
 
-      {answers.map((answer, index) => (
-        <div key={answer.id} className="flex items-center mb-8 space-x-4">
-          <div className="w-2/12">
-            <input
-              type="radio"
-              name="correctAnswer"
-              className="form-radio h-4 w-4 mt-2.5 text-[#464E5F] border-gray-300 focus:ring-[#2E8F96]"
-              value={answer.id}
-            />
+      {modifiedOptions.map((option, index) => {
+        const id = String.fromCharCode(65 + index); // Incremental ID for each answer
+        return (
+          <div key={id} className="flex items-center mb-8 space-x-4">
+            <div className="w-2/12">
+              <input
+                type="checkbox" // Use checkbox to allow multiple correct answers
+                name="correctAnswer"
+                className="form-checkbox h-4 w-4 mt-2.5 text-[#464E5F] border-gray-300 focus:ring-[#2E8F96]"
+                value={id}
+                checked={selectedCorrectAnswers.includes(id)}
+                onChange={() => handleCorrectAnswerChange(id)} // Handle change
+              />
+            </div>
+            <div className="w-8/12 gap-2">
+              <TextEditor
+                name={`answer${id}`}
+                required={true}
+                placeholder="I am your rich text editor."
+                className="w-full"
+                height={120}
+                value={option} // Use the value from the modified options
+                onChange={(content) => handleOptionChange(index, content)} // Update the option
+              />
+            </div>
           </div>
-          <div className="w-8/12 gap-2">
-            <TextEditor
-              name={`answer${index}`}
-              // label={`Answer ${index + 1}`}
-              required={true}
-              placeholder={answer.placeholder}
-              className="w-full"
-              height={120}
-              z
-            />
-          </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 };

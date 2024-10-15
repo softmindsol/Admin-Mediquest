@@ -96,7 +96,9 @@ const Table = ({ setParams, params }) => {
                   </td>
                   <td className="flex items-center justify-center px-6 py-4 space-x-2">
                     <div className="flex border border-[#EEEEEE] rounded">
-                      <Link to={`/edit-question/${row?.documentId}`}>
+                      <Link
+                        to={`/edit-question/${row?.documentId}/${row?.questionId}`}
+                      >
                         <button
                           // onClick={openEditModal}
                           className="font-medium cursor-pointer text-[#282F5A] p-2 rounded-full hover:bg-[#282F5A1F] transition-all duration-300"

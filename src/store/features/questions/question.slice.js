@@ -1,13 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getAllQuestions, getDocumentQuestion } from "./question.service";
+import { getAllQuestions, getQuestion } from "./question.service";
 const initialState = {
   questions: [],
   isLoading: false,
   error: null,
   documentQuestions: {
-    currentPage: 0,
-    totalPages: 0,
-    questions: [],
+    currentQuestion: 0,
+    totalQuestions: 0,
+    questions: {},
     metadata: {},
   },
 };
@@ -27,17 +27,17 @@ const questionSlice = createSlice({
       .addCase(getAllQuestions.rejected, (state, action) => {
         state.error = action.payload.error;
       })
-      .addCase(getDocumentQuestion.pending, (state, _) => {
+      .addCase(getQuestion.pending, (state, _) => {
         state.isLoading = true;
       })
-      .addCase(getDocumentQuestion.fulfilled, (state, action) => {
+      .addCase(getQuestion.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.documentQuestions.currentPage = action?.payload?.currentPage;
-        state.documentQuestions.questions =action.payload?.questions
-        state.documentQuestions.totalPages = action.payload?.totalPages
-        state.documentQuestions.metadata = action.payload?.metadata
+        state.documentQuestions.currentQuestion = action?.payload?.pageNo;
+        state.documentQuestions.questions = action.payload?.question;
+        state.documentQuestions.totalQuestions = action.payload?.totalQuestions;
+        state.documentQuestions.metadata = action.payload?.metadata;
       })
-      .addCase(getDocumentQuestion.rejected, (state, action) => {
+      .addCase(getQuestion.rejected, (state, action) => {
         state.error = action.payload.error;
       });
   },

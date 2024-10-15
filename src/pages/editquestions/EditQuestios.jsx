@@ -6,40 +6,62 @@ import EditQuestion from "../../components/EditQuestion";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import TextEditor from "../../components/TextEditor";
 import { useDispatch, useSelector } from "react-redux";
-import { getDocumentQuestion } from "../../store/features/questions/question.service";
+import { getQuestion } from "../../store/features/questions/question.service";
 
 const EditQuestions = () => {
   const {
-    totalPages,
-    currentPage,
-    questions,
-    metadata: metaData,
-  } = useSelector((state) => state?.questions?.documentQuestions);
-  const [firstQuestion] = questions || [];
+    totalQuestions = 0,
+    currentQuestion = undefined,
+    questions = {},
+    metadata: metaData = {},
+  } = useSelector((state) => state?.questions?.documentQuestions) || {};
 
   const dispatch = useDispatch();
-  const { documentId } = useParams();
-  const [pageNo, setPageNo] = useState(1);
+  const { documentId, questionId } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
+  const pageNo = currentQuestion;
+  console.log("🚀 ~ }=useSelector ~ pageNo:", pageNo);
 
-  const updatedParams = (newPageNo) => {
-    setSearchParams({ page: newPageNo });
-    setPageNo(newPageNo);
-  };
-
-  console.log(firstQuestion?.deploy);
-
-  const [isDeployed, setIsDeployed] = useState(firstQuestion?.deploy);
-  console.log("🚀 ~ EditQuestions ~ isDeployed:", isDeployed);
+  const [isDeployed, setIsDeployed] = useState(questions?.deploy);
 
   useEffect(() => {
-    dispatch(getDocumentQuestion({ documentId, pageNo }));
-  }, [dispatch, documentId, pageNo]);
+    const fetchQuestion = async () => {
+      const left = searchParams.get("left") || "";
+      await dispatch(
+        getQuestion({ documentId, questionId, pageNo: String(pageNo), left })
+      );
+    };
+
+    fetchQuestion();
+  }, [dispatch, documentId, questionId, pageNo, searchParams]);
+
+  const updatedParams = (newPageNo, newLeft) => {
+    const params = new URLSearchParams(searchParams);
+    params.set("pageNo", newPageNo);
+    if (newLeft) {
+      params.set("left", newLeft);
+    } else {
+      params.delete("left");
+    }
+    setSearchParams(params);
+  };
+
+  const handlePrev = () => {
+    if (pageNo > 1) {
+      updatedParams(pageNo - 1, "left");
+    }
+  };
+
+  const handleNext = () => {
+    if (pageNo < totalQuestions) {
+      updatedParams(pageNo + 1, "");
+    }
+  };
 
   // Initialize formik
   const formik = useFormik({
     initialValues: {
-      question: firstQuestion?.question || "",
+      question: questions?.question || "",
       solution: "",
       examVar: metaData?.exam_variable || "",
       year: metaData?.exam_year || "",
@@ -73,22 +95,23 @@ const EditQuestions = () => {
       {/* Navigation Buttons */}
       <div className="flex items-center justify-center mt-16 space-x-4">
         <button
-          onClick={() => pageNo > 1 && updatedParams(pageNo - 1)}
+          onClick={handlePrev}
           className="px-4 py-3 text-gray-500 bg-white border border-[#E9ECEF] rounded"
+          disabled={pageNo <= 1}
         >
           &lt; Prev
         </button>
         <div className="px-4 py-3 bg-[#3A57E8] text-white border border-[#7749F8] rounded">
-          {pageNo} of {totalPages}
+          {currentQuestion} of {totalQuestions}
         </div>
         <button
-          onClick={() => pageNo < totalPages && updatedParams(pageNo + 1)}
+          onClick={handleNext}
           className="px-4 py-3 text-gray-500 bg-white border border-[#E9ECEF] rounded"
+          disabled={pageNo >= totalQuestions}
         >
           Next &gt;
         </button>
       </div>
-
       {/* Dropdowns and Action Buttons */}
       <div className="flex flex-wrap items-center justify-between gap-3 mt-6 mb-10">
         <div className="flex flex-wrap items-center space-x-2 lg:flex-row">
@@ -210,7 +233,7 @@ const EditQuestions = () => {
 
       {/* Edit Question Component */}
       <EditQuestion />
-      <div className="relative pb-20 mt-10 px-7">
+      {/* <div className="relative pb-20 mt-10 px-7">
         <form onSubmit={formik.handleSubmit}>
           <div className="mb-6">
             <TextEditor
@@ -231,7 +254,7 @@ const EditQuestions = () => {
             )}
           </div>
         </form>
-      </div>
+      </div> */}
     </DefaultLayout>
   );
 };

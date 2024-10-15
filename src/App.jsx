@@ -69,7 +69,7 @@ function App() {
         />
 
         <Route
-          path="/edit-question/:documentId"
+          path="/edit-question/:documentId/:questionId"
           element={
             <ProtectedRoute>
               <EditQuestions />

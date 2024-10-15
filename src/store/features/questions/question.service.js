@@ -145,3 +145,30 @@ export const getDocumentQuestion = createAsyncThunk(
     }
   }
 );
+
+
+
+
+export const getQuestion = createAsyncThunk(
+  "getQuestion",
+  async ({ documentId, questionId, left, pageNo }, { rejectWithValue }) => {
+    console.log("🚀 ~ left:", left);
+    console.log("🚀 ~ pageNo:", pageNo);
+    console.log("🚀 ~ pageNo:", typeof pageNo);
+
+    console.log("🚀 ~ questionId:", questionId);
+    console.log("🚀 ~ documentId:", documentId);
+    try {
+      const response = await axiosWithoutToken.get(
+        `/questions/get-question/${documentId}/${questionId}?left=${left}`
+      );
+
+      console.log(response?.data?.data);
+
+      return response?.data?.data;
+    } catch (error) {
+      console.log(error);
+      return rejectWithValue(error);
+    }
+  }
+);
