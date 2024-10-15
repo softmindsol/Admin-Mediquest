@@ -2,15 +2,17 @@ import React, { useEffect, useState } from "react";
 import TextEditor from "./TextEditor"; // Import your TextEditor component
 import { useSelector } from "react-redux";
 
-const EditQuestion = () => {
+const EditQuestion = ({
+  modifiedOptions,
+  setModifiedOptions,
+  selectedCorrectAnswers,
+  setSelectedCorrectAnswers,
+}) => {
   const { questions = {} } =
     useSelector((state) => state?.questions?.documentQuestions) || {};
 
   const { options = [], correct_answers = [] } = questions;
-
-  // State for modified options and correct answers
-  const [modifiedOptions, setModifiedOptions] = useState([]);
-  const [selectedCorrectAnswers, setSelectedCorrectAnswers] = useState([]);
+  console.log("🚀 ~ EditQuestion ~ options:", options);
 
   // Initialize state with existing options and correct answers
   useEffect(() => {
@@ -49,12 +51,12 @@ const EditQuestion = () => {
           <div key={id} className="flex items-center mb-8 space-x-4">
             <div className="w-2/12">
               <input
-                type="checkbox" // Use checkbox to allow multiple correct answers
+                type="checkbox"
                 name="correctAnswer"
                 className="form-checkbox h-4 w-4 mt-2.5 text-[#464E5F] border-gray-300 focus:ring-[#2E8F96]"
                 value={id}
                 checked={selectedCorrectAnswers.includes(id)}
-                onChange={() => handleCorrectAnswerChange(id)} // Handle change
+                onChange={() => handleCorrectAnswerChange(id)}
               />
             </div>
             <div className="w-8/12 gap-2">
@@ -64,8 +66,8 @@ const EditQuestion = () => {
                 placeholder="I am your rich text editor."
                 className="w-full"
                 height={120}
-                value={option} // Use the value from the modified options
-                onChange={(content) => handleOptionChange(index, content)} // Update the option
+                value={option}
+                onChange={(content) => handleOptionChange(index, content)}
               />
             </div>
           </div>
