@@ -31,7 +31,7 @@ const Table = ({ setParams, params }) => {
   const state = useSelector((state) => state?.questions);
   console.log(state);
 
-  const { openModal, closeModal } = useModal();
+  // const { openModal, closeModal } = useModal();
 
   // const openWarningModal = (documentId, questionId) => {
   //   openModal(
