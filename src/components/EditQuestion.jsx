@@ -44,20 +44,23 @@ const EditQuestion = ({
       </div>
 
       {modifiedOptions.map((option, index) => {
-        const id = String.fromCharCode(65 + index);
+        const id = String.fromCharCode(65 + index); // A, B, C, etc.
+
         return (
           <div key={id} className="flex items-center mb-8 space-x-4">
-            <div className="w-2/12">
+            <div className="w-2/12 flex items-center gap-10">
+              <span className="mr-2 mt-1  text-[#211C1B] font-bold lg:text-[20px]">{id}.</span>
+
               <input
                 type="checkbox"
                 name="correctAnswer"
-                className="form-checkbox h-4 w-4 mt-2.5 text-[#464E5F] border-gray-300 focus:ring-[#2E8F96]"
+                className="form-checkbox h-4 w-4  rounded-full mt-1 text-[#464E5F] border-gray-300 focus:ring-[#2E8F96]"
                 value={id}
                 checked={selectedCorrectAnswers.includes(id)}
                 onChange={() => handleCorrectAnswerChange(id)}
               />
             </div>
-            <div className="w-8/12 gap-2">
+            <div className="w-8/12">
               <TextEditor
                 name={`answer${id}`}
                 required={true}

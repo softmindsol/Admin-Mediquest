@@ -20,7 +20,18 @@ const EditQuestions = () => {
     questions = {},
     metadata: metaData = {},
   } = useSelector((state) => state?.questions?.documentQuestions) || {};
+  const [image, setImage] = useState(null);
 
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setImage(URL.createObjectURL(file));
+    }
+  };
+
+  const handleRemoveImage = () => {
+    setImage(null);
+  };
   const dispatch = useDispatch();
   const { documentId, questionId } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -119,7 +130,6 @@ const EditQuestions = () => {
           GO BACK
         </Link>
       </div>
-
       <div className="flex items-center justify-center mt-16 space-x-4">
         <button
           onClick={handlePrev}
@@ -139,7 +149,6 @@ const EditQuestions = () => {
           Next &gt;
         </button>
       </div>
-
       <div className="flex flex-wrap items-center justify-between gap-3 mt-6 mb-10">
         <div className="flex flex-wrap items-center space-x-2 lg:flex-row">
           {/* Exam Variable Dropdown */}
@@ -232,7 +241,6 @@ const EditQuestions = () => {
           </button>
         </div>
       </div>
-
       <div className="relative px-7">
         <form onSubmit={formik.handleSubmit}>
           <div className="mb-6">
@@ -254,7 +262,36 @@ const EditQuestions = () => {
           </div>
         </form>
       </div>
-
+        <div className="p-4 flex items-end justify-between">
+          <div className="lg:w-[60%] flex justify-end ite w-full">
+            {image ? (
+              <img
+                src={image}
+                alt="Uploaded"
+                className="w-100 h-64 object-cover"
+              />
+            ) : (
+              <div className="">
+              </div>
+            )}
+          </div>
+          <div className="mt-4 flex  flex-col justify-end items-end  space-y-4">
+            <button
+              onClick={handleRemoveImage}
+              className="bg-[#FF3B30] text-white text-title-p font-semibold  px-4 w-fit py-2 rounded cursor-pointer"
+            >
+              Remove Image
+            </button>
+            <label className="bg-[#007AFF] text-white text-title-p font-semibold  px-4 w-fit py-2 rounded cursor-pointer">
+              Upload new Image
+              <input
+                type="file"
+                onChange={handleImageUpload}
+                className="hidden"
+              />
+            </label>
+          </div>
+      </div>
       <EditQuestion
         modifiedOptions={modifiedOptions}
         setModifiedOptions={setModifiedOptions}
