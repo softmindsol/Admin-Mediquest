@@ -11,6 +11,8 @@ import {
   getQuestion,
 } from "../../store/features/questions/question.service";
 
+
+
 const EditQuestions = () => {
   const [modifiedOptions, setModifiedOptions] = useState([]);
   const [selectedCorrectAnswers, setSelectedCorrectAnswers] = useState([]);
@@ -22,21 +24,35 @@ const EditQuestions = () => {
   } = useSelector((state) => state?.questions?.documentQuestions) || {};
   const [image, setImage] = useState(null);
 
-  const handleImageUpload = (event) => {
-    const file = event.target.files[0];
+  // const handleImageUpload = (event) => {
+  //   const file = event.target.files[0];
+  //   if (file) {
+  //     setImage(URL.createObjectURL(file));
+  //   }
+  // };
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
     if (file) {
-      setImage(URL.createObjectURL(file));
+      const reader = new FileReader();
+      reader.onload = () => {
+        setImage(reader.result);
+        setImageUrl("");
+      };
+      reader.readAsDataURL(file);
     }
   };
 
   const handleRemoveImage = () => {
     setImage(null);
+    setImageUrl("");
   };
   const dispatch = useDispatch();
   const { documentId, questionId } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const [pageNo, setPageNo] = useState();
   const [searchPageNo, setSearchPageNo] = useState();
+  const [image_url, setImageUrl] = useState("");
   const [isDeployed, setIsDeployed] = useState(questions?.deploy);
 
   useEffect(() => {
@@ -49,8 +65,11 @@ const EditQuestions = () => {
             pageNo: searchParams.get("pageNo"),
           })
         );
+        console.log(res?.payload?.question?.image_url);
 
         setSearchPageNo(res?.payload?.pageNo);
+        setImage(res?.payload?.question?.image_url);
+        setImageUrl(res?.payload?.question?.image_url);
         console.log("API Response: ", res);
       } catch (error) {
         console.error("Error fetching question: ", error);
@@ -101,6 +120,8 @@ const EditQuestions = () => {
         ...values,
         deploy: isDeployed,
         options: modifiedOptions,
+        image_url,
+        image,
         correct_answers: selectedCorrectAnswers,
       };
 
@@ -109,6 +130,8 @@ const EditQuestions = () => {
           editQuestion({
             documentId,
             questionId: questions?._id,
+            image_url: "",
+            image,
             data: updatedData,
           })
         );
@@ -262,35 +285,34 @@ const EditQuestions = () => {
           </div>
         </form>
       </div>
-        <div className="p-4 flex items-end justify-between">
-          <div className="lg:w-[60%] flex justify-end ite w-full">
-            {image ? (
-              <img
-                src={image}
-                alt="Uploaded"
-                className="w-100 h-64 object-cover"
-              />
-            ) : (
-              <div className="">
-              </div>
-            )}
-          </div>
-          <div className="mt-4 flex  flex-col justify-end items-end  space-y-4">
-            <button
-              onClick={handleRemoveImage}
-              className="bg-[#FF3B30] text-white text-title-p font-semibold  px-4 w-fit py-2 rounded cursor-pointer"
-            >
-              Remove Image
-            </button>
-            <label className="bg-[#007AFF] text-white text-title-p font-semibold  px-4 w-fit py-2 rounded cursor-pointer">
-              Upload new Image
-              <input
-                type="file"
-                onChange={handleImageUpload}
-                className="hidden"
-              />
-            </label>
-          </div>
+      <div className="flex items-end justify-between p-4">
+        <div className="lg:w-[60%] flex justify-end ite w-full">
+          {image ? (
+            <img
+              src={image}
+              alt="Uploaded"
+              className="object-cover h-64 w-100"
+            />
+          ) : (
+            <div className=""></div>
+          )}
+        </div>
+        <div className="flex flex-col items-end justify-end mt-4 space-y-4">
+          <button
+            onClick={handleRemoveImage}
+            className="bg-[#FF3B30] text-white text-title-p font-semibold  px-4 w-fit py-2 rounded cursor-pointer"
+          >
+            Remove Image
+          </button>
+          <label className="bg-[#007AFF] text-white text-title-p font-semibold  px-4 w-fit py-2 rounded cursor-pointer">
+            Upload new Image
+            <input
+              type="file"
+              onChange={handleImageUpload}
+              className="hidden"
+            />
+          </label>
+        </div>
       </div>
       <EditQuestion
         modifiedOptions={modifiedOptions}

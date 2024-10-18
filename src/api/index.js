@@ -10,39 +10,55 @@ const axiosWithoutToken = axios.create({
   withCredentials: true,
 });
 
-// axiosWithoutToken.interceptors.response.use(
-//   (response) => response,
-//   async (error) => {
-//     const originalRequest = error.config;
+const MAX_RETRY_COUNT = 1;
+axiosWithoutToken.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
 
-//     if (
-//       error.response &&
-//       error.response.status === 401 &&
-//       !originalRequest._retry
-//     ) {
-//       originalRequest._retry = true;
+    console.log(error);
 
-//       try {
-//         const response = await axiosWithoutToken.post(
-//           "/admin/refresh-access-token",
-//           {},
-//           { withCredentials: true }
-//         );
+    if (
+      error.response &&
+      error.response.status === 401 &&
+      !originalRequest._retry
+    ) {
+      originalRequest._retry = true;
+      originalRequest._retryCount = (originalRequest._retryCount || 0) + 1;
 
-//         const { accessToken } = response.data;
-//         // originalRequest.headers["Authorization"] = `Bearer ${accessToken}`;
+      if (originalRequest._retryCount > MAX_RETRY_COUNT) {
+        return Promise.reject(new Error("Max retry attempts reached"));
+      }
 
-//         // Retry the original request with the new access token
-//         return axiosWithoutToken(originalRequest);
-//       } catch (err) {
-//         // Handle errors from the refresh token request
-//         return Promise.reject(err);
-//       }
-//     }
+      try {
+        await axiosWithoutToken.post(
+          "/admin/refresh-access-token",
+          {},
+          { withCredentials: true }
+        );
 
-//     // If the error is not due to an expired token, reject the Promise
-//     return Promise.reject(error);
-//   }
-// );
+        // Assuming the response contains the new token
+        // const newToken = response.data.token; // Adjust this line according to your API response
+
+        // Optionally, set the new token in the request headers
+        // originalRequest.headers['Authorization'] = `Bearer ${newToken}`;
+
+        // Retry the original request with the new token
+        return axiosWithoutToken(originalRequest);
+      } catch (err) {
+        // Handle the error from the refresh request
+        if (err.response && err.response.status === 401) {
+          // If refresh also fails with 401, reject and handle logout or redirect
+          return Promise.reject(
+            new Error("Session expired. Please log in again.")
+          );
+        }
+        return Promise.reject(err);
+      }
+    }
+
+    return Promise.reject(error);
+  }
+);
 
 export { axiosWithoutToken, apiClient };

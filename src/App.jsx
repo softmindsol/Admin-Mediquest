@@ -24,6 +24,9 @@ function App() {
   const dispatch = useDispatch();
   const isLoggedIn = useSelector((state) => state?.admin?.isLoggedIn);
 
+
+  console.log("Hello", document.cookie);
+
   useEffect(() => {
     if (!isLoggedIn) {
       dispatch(verifyToken());

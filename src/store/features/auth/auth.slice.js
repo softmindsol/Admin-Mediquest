@@ -25,7 +25,6 @@ const authSlice = createSlice({
       .addCase(loginAdmin.rejected, (state, action) => {
         state.isLoading = false;
         state.isLoggedIn = false;
-        localStorage.setItem("isLoggedIn", true)
         state.error = action.payload;
       })
       .addCase(verifyToken.pending, (state) => {
@@ -35,12 +34,10 @@ const authSlice = createSlice({
       .addCase(verifyToken.fulfilled, (state, action) => {
         state.isLoggedIn = action.payload;
         state.isLoading = false;
-        localStorage.setItem("isLoggedIn", action.payload);
       })
       .addCase(verifyToken.rejected, (state, action) => {
         state.isLoading = false;
         state.isLoggedIn = false;
-        localStorage.removeItem("isLoggedIn")
         state.error = action.payload;
       })
 
@@ -52,7 +49,6 @@ const authSlice = createSlice({
         state.user = null;
         state.isLoading = false;
         state.isLoggedIn = false;
-        localStorage.removeItem("isLoggedIn");
       })
       .addCase(logout.rejected, (state, action) => {
         state.isLoading = false;
