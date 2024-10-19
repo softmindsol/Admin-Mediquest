@@ -21,17 +21,7 @@ import NotFound from "./pages/NotFound";
 
 
 function App() {
-  const dispatch = useDispatch();
-  const isLoggedIn = useSelector((state) => state?.admin?.isLoggedIn);
-
-
-  console.log("Hello", document.cookie);
-
-  useEffect(() => {
-    if (!isLoggedIn) {
-      dispatch(verifyToken());
-    }
-  }, [dispatch, isLoggedIn]);
+  // const isLoggedIn = useSelector((state) => state?.admin?.isLoggedIn);
 
   return (
     <Router>
@@ -44,6 +34,7 @@ function App() {
             </LoginRoute>
           }
         />
+
         <Route
           path="/"
           element={

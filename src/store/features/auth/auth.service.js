@@ -11,7 +11,7 @@ export const loginAdmin = createAsyncThunk(
       return response.data;
     } catch (error) {
       if (error) {
-        toast.error(error?.response?.data?.error);
+        toast.error(error?.response?.data?.error || "Error occur");
         return rejectWithValue(error);
       }
     }
@@ -31,7 +31,7 @@ export const changePassword = createAsyncThunk(
       return response.data;
     } catch (error) {
       if (error) {
-        toast.error(error?.response?.data?.error);
+        toast.error(error?.response?.data?.error || "Error occur");
         return rejectWithValue(error);
       }
     }
@@ -43,12 +43,13 @@ export const logout = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axiosWithoutToken.post("/admin/logout");
+      console.log("🚀 ~ response:", response);
 
       toast.success(response?.data?.message);
       return response.data;
     } catch (error) {
       if (error) {
-        toast.error(error?.response?.data?.error);
+        toast.error(error?.response?.data?.error || "Error occur");
         return rejectWithValue(error);
       }
     }
@@ -59,7 +60,7 @@ export const verifyToken = createAsyncThunk(
   "verifyToken",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await apiClient.get("/admin/verifyAdminToken");
+      const response = await axiosWithoutToken.get("/admin/verifyAdminToken");
 
       return response?.data?.data?.isLoggedIn;
     } catch (error) {

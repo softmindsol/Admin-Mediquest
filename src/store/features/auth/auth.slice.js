@@ -21,6 +21,7 @@ const authSlice = createSlice({
       .addCase(loginAdmin.fulfilled, (state, action) => {
         state.isLoggedIn = true;
         state.isLoading = false;
+        localStorage.setItem("isLoggedIn", true)
       })
       .addCase(loginAdmin.rejected, (state, action) => {
         state.isLoading = false;
@@ -47,8 +48,10 @@ const authSlice = createSlice({
       })
       .addCase(logout.fulfilled, (state, action) => {
         state.user = null;
-        state.isLoading = false;
         state.isLoggedIn = false;
+        state.isLoading = false;
+        localStorage.removeItem("isLoggedIn");
+
       })
       .addCase(logout.rejected, (state, action) => {
         state.isLoading = false;
