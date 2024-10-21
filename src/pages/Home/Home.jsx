@@ -1,13 +1,29 @@
-import React from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import DefaultLayout from "../../layouts/DefaultLayout";
-import { uploadQuestions } from "../../store/features/questions/question.service";
+import Table from "../../components/table/Table";
+import {
+  getAllQuestions,
+  uploadQuestions,
+} from "../../store/features/questions/question.service";
+import { useDispatch } from "react-redux";
+import useDebouncedEffect from "../../hooks/useDebounce";
 
 const Home = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const dispatch = useDispatch();
+
+  useDebouncedEffect(
+    () => {
+      const params = Object.fromEntries(searchParams.entries());
+      dispatch(getAllQuestions(params));
+    },
+    [searchParams],
+    500
+  );
+
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
-
     if (file) {
       const reader = new FileReader();
       reader.onload = async (e) => {
@@ -28,14 +44,25 @@ const Home = () => {
       reader.readAsText(file);
     }
   };
+
+  const updateSearchParams = (newParams) => {
+    setSearchParams((prev) => {
+      const updatedParams = new URLSearchParams(prev);
+      Object.keys(newParams).forEach((key) => {
+        if (newParams[key]) {
+          updatedParams.set(key, newParams[key]);
+        } else {
+          updatedParams.delete(key);
+        }
+      });
+      return updatedParams;
+    });
+  };
   return (
     <DefaultLayout>
-      <div className="text-title-md font-semibold mt-17 text-[#343A40]">
-        Add Data
-      </div>
-      <div className="flex my-8 ">
-        <label className="bg-white text-title-md text-black rounded-2xl font-semibold py-24 px-44 lg:w-fit w-[90%]  text-center cursor-pointer">
-          Upload
+      <div className="flex flex-col items-end justify-end gap-3 space-x-4 mt-17">
+        <label className="bg-[#3A57E8] text-title-p font-semibold text-white py-3 px-4 rounded-md cursor-pointer">
+          Upload JSON
           <input
             type="file"
             accept=".json"
@@ -44,6 +71,14 @@ const Home = () => {
           />
         </label>
       </div>
+      <div className="text-title-md font-semibold mt-1 mb-9 text-[#343A40]">
+        My JSON
+      </div>
+
+      <Table
+        params={Object.fromEntries(searchParams.entries())}
+        setParams={updateSearchParams}
+      />
     </DefaultLayout>
   );
 };
