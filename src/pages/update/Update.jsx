@@ -22,6 +22,9 @@ const Update = () => {
   } = useSelector((state) => state?.questions?.documentQuestions) || {};
   const [image, setImage] = useState(null);
 
+
+  const { isLoading } = useSelector((state) => state?.questions);
+
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -45,6 +48,18 @@ const Update = () => {
   const [isDeployed, setIsDeployed] = useState(questions?.deploy);
 
   useEffect(() => {
+    // Check if pageNo is present in the search params
+    const currentPageNo = searchParams.get("pageNo");
+    if (!currentPageNo) {
+      // If not present, set pageNo to 1
+      setPageNo(1);
+      setSearchParams({ pageNo: 1 });
+    } else {
+      setPageNo(Number(currentPageNo));
+    }
+  }, [searchParams, setSearchParams]);
+
+  useEffect(() => {
     const fetchQuestion = async () => {
       try {
         const res = await dispatch(
@@ -52,10 +67,12 @@ const Update = () => {
             pageNo: searchParams.get("pageNo") || 1,
           })
         );
-        console.log(res?.payload?.question?.image_url);
+        console.log(res?.payload?.allQuestions?.image_url);
 
-        setImage(res?.payload?.question?.image_url);
-        setImageUrl(res?.payload?.question?.image_url);
+        if (res.type === "getAllDocQuestions/fulfilled") {
+          setImage(res?.payload?.allQuestions?.image_url);
+          setImageUrl(res?.payload?.allQuestions?.image_url);
+        }
         console.log("API Response: ", res);
       } catch (error) {
         console.error("Error fetching question: ", error);
@@ -109,18 +126,17 @@ const Update = () => {
         correct_answers: selectedCorrectAnswers,
       };
 
-      console.log(updatedData);
-
       try {
-        const res = await dispatch();
-        // editQuestion({
-        //   documentId,
-        //   questionId: questions?._id,
-        //   image_url: "",
-        //   image,
-        //   data: updatedData,
-        // })
-        // console.log("Edit Question Response: ", res);
+        const res = await dispatch(
+          editQuestion({
+            documentId,
+            questionId: questions?._id,
+            image_url: "",
+            image,
+            data: updatedData,
+          })
+        );
+        console.log("Edit Question Response: ", res);
       } catch (error) {
         console.error("Error submitting edit: ", error);
       }
@@ -142,7 +158,7 @@ const Update = () => {
         <button
           onClick={handlePrev}
           className="px-4 py-3 text-gray-500 bg-white border border-[#E9ECEF] rounded"
-          disabled={pageNo <= 1}
+          disabled={pageNo <= 1 || isLoading}
         >
           &lt; Prev
         </button>
@@ -152,7 +168,7 @@ const Update = () => {
         <button
           onClick={handleNext}
           className="px-4 py-3 text-gray-500 bg-white border border-[#E9ECEF] rounded"
-          disabled={pageNo >= totalQuestions}
+          disabled={pageNo >= totalQuestions || isLoading}
         >
           Next &gt;
         </button>
@@ -276,10 +292,10 @@ const Update = () => {
             <img
               src={image}
               alt="Uploaded"
-              className="object-cover h-64 w-100"
+              className="object-contain h-64 w-100"
             />
           ) : (
-            <div className=""></div>
+            <div className="text-sm ">No image uploaded</div>
           )}
         </div>
         <div className="flex flex-col items-end justify-end mt-4 space-y-4">
