@@ -9,10 +9,10 @@ else
 fi
 
 # Remove the existing build directory if it exists
-if [ -d "/var/www/html/mediquest-admin-build" ]; then
+if [ -d "/var/www/html/medquest-admin-build" ]; then
   echo "Removing old build directory..."
   sudo_pass=$(<~/.sudo_pass)
-  echo $sudo_pass | sudo -S rm -rf /var/www/html/mediquest-admin-build
+  echo $sudo_pass | sudo -S rm -rf /var/www/html/medquest-admin-build
   echo "Old build directory removed."
 else
   echo "No existing build directory to remove."
@@ -20,8 +20,8 @@ fi
 
 # Copy the new build directory to the deployment location
 echo "Copying new build directory..."
-echo $sudo_pass | sudo -S cp -r dist /var/www/html/mediquest-admin-build
-echo "New build directory copied to /var/www/html/mediquest-admin-build."
+echo $sudo_pass | sudo -S cp -r dist /var/www/html/medquest-admin-build
+echo "New build directory copied to /var/www/html/medquest-admin-build."
 
 # Restart Nginx to apply changes
 # Read the password from the file and restart Nginx
