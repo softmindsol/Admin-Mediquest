@@ -1,5 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getAllQuestions, getQuestion } from "./question.service";
+import {
+  getAllDocQuestions,
+  getAllQuestions,
+  getQuestion,
+} from "./question.service";
 const initialState = {
   questions: [],
   isLoading: false,
@@ -38,6 +42,20 @@ const questionSlice = createSlice({
         state.documentQuestions.metadata = action.payload?.metadata;
       })
       .addCase(getQuestion.rejected, (state, action) => {
+        state.error = action.payload.error;
+      })
+      .addCase(getAllDocQuestions.pending, (state, _) => {
+        state.isLoading = true;
+      })
+      .addCase(getAllDocQuestions.fulfilled, (state, action) => {
+        state.isLoading = false;
+        // state.documentQuestions.currentQuestion = action?.payload?.pageNo;
+        state.documentQuestions.questions =
+          action.payload?.allQuestions?.question;
+        state.documentQuestions.totalQuestions = action.payload?.totalQuestions;
+        state.documentQuestions.metadata = action.payload?.metadata;
+      })
+      .addCase(getAllDocQuestions.rejected, (state, action) => {
         state.error = action.payload.error;
       });
   },

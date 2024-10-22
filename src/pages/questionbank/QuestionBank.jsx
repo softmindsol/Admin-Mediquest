@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import DefaultLayout from "../../layouts/DefaultLayout";
 import Table from "../../components/table/Table";
 import Filter from "../../components/Filter";
@@ -37,7 +37,16 @@ const QuestionBank = () => {
           //   new Blob([JSON.stringify(json)], { type: "application/json" }),
           //   file.name
           // );
-          await dispatch(uploadQuestions(json));
+          const res = await dispatch(uploadQuestions(json));
+
+          console.log(res.type === "uploadQuestion/fulfilled");
+
+          if (res.type === "uploadQuestion/fulfilled") {
+            console.log("Why not working...");
+
+            await dispatch(getAllQuestions());
+          }
+          console.log("🚀 ~ reader.onload= ~ res:", res);
         } catch (err) {
           console.error("Invalid JSON file", err);
         }
@@ -73,9 +82,11 @@ const QuestionBank = () => {
               onChange={handleFileUpload}
             />
           </label>
-          <button className="bg-[#007AFF] text-white text-title-p font-semibold py-2 px-4 rounded-md">
-            Switch to Individual view
-          </button>
+          <Link to="/update-questions">
+            <button className="bg-[#007AFF] text-white text-title-p font-semibold py-2 px-4 rounded-md">
+              Switch to Individual view
+            </button>
+          </Link>
         </div>
         <Filter
           params={Object.fromEntries(searchParams.entries())}

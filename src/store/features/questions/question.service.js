@@ -175,5 +175,30 @@ export const getQuestion = createAsyncThunk(
 );
 
 
+export const getAllDocQuestions = createAsyncThunk(
+  "getAllDocQuestions",
+  async ({ pageNo }, { rejectWithValue }) => {
+    const params = {};
+
+    if (pageNo) {
+      params.pageNo = pageNo;
+    }
+
+    try {
+      const response = await axiosWithoutToken.get(
+        `/questions/get-all-questions`,
+        {
+          params,
+        }
+      );
+      console.log(response?.data?.data);
+
+      return response?.data?.data;
+    } catch (error) {
+      console.log(error);
+      return rejectWithValue(error);
+    }
+  }
+);
 
 

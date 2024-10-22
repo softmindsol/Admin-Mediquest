@@ -10,7 +10,31 @@ const Pagination = ({
   hasNext,
   hasPrev,
 }) => {
-  const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+  const pages = [];
+
+  if (totalPages <= 5) {
+    for (let i = 1; i <= totalPages; i++) {
+      pages.push(i);
+    }
+  } else {
+    pages.push(1);
+
+    if (currentPage > 3) {
+      pages.push("...");
+    }
+
+    const start = Math.max(2, currentPage - 1);
+    const end = Math.min(totalPages - 1, currentPage + 1);
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+
+    if (currentPage < totalPages - 2) {
+      pages.push("...");
+    }
+
+    pages.push(totalPages);
+  }
 
   return (
     <div className="p-4 sm:p-6 xl:p-7.5 flex items-center justify-center ">
@@ -20,30 +44,42 @@ const Pagination = ({
             <button
               onClick={onPrevPage}
               disabled={!hasPrev}
-              className={`flex items-center justify-center h-10 w-10 rounded-l-md  shadow hover:bg-gray-200 hover:text-blue-600 disabled:cursor-not-allowed disabled:bg-gray-200`}
+              className={`flex items-center justify-center h-10 w-10 rounded-l-md shadow hover:bg-gray-200 hover:text-blue-600 ${
+                !hasPrev
+                  ? "disabled:cursor-not-allowed disabled:bg-gray-200"
+                  : ""
+              }`}
             >
               <GrFormPrevious size={24} />
             </button>
           </li>
-          {pages.map((page) => (
-            <li key={page}>
-              <button
-                onClick={() => onPageChange(page)}
-                className={`flex items-center justify-center  shadow py-2 px-4 font-medium${
-                  page === currentPage
-                    ? " border border-[#3182CE] text-[#3182CE]"
-                    : " text-black hover:bg-gray-100"
-                }`}
-              >
-                {page}
-              </button>
+          {pages.map((page, index) => (
+            <li key={index}>
+              {page === "..." ? (
+                <span className="px-2">...</span>
+              ) : (
+                <button
+                  onClick={() => onPageChange(page)}
+                  className={`flex items-center justify-center shadow py-2 px-4 font-medium ${
+                    page === currentPage
+                      ? "border border-[#3182CE] text-[#3182CE]"
+                      : "text-black hover:bg-gray-100"
+                  }`}
+                >
+                  {page}
+                </button>
+              )}
             </li>
           ))}
           <li>
             <button
               onClick={onNextPage}
               disabled={!hasNext}
-              className={`flex items-center justify-center h-10 w-10 rounded-l-md  shadow hover:bg-gray-200 hover:text-blue-600 disabled:cursor-not-allowed disabled:bg-gray-200`}
+              className={`flex items-center justify-center h-10 w-10 rounded-l-md shadow hover:bg-gray-200 hover:text-blue-600 ${
+                !hasNext
+                  ? "disabled:cursor-not-allowed disabled:bg-gray-200"
+                  : ""
+              }`}
             >
               <GrFormNext size={24} />
             </button>

@@ -10,6 +10,7 @@ import { ModalProvider } from "./context/modal";
 import EditQuestions from "./pages/editquestions/EditQuestios";
 import NotFound from "./pages/NotFound";
 import QuestionBank from "./pages/questionbank/QuestionBank";
+import Update from "./pages/update/Update";
 
 function App() {
   // const isLoggedIn = useSelector((state) => state?.admin?.isLoggedIn);
@@ -61,6 +62,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/update-questions" element={<Update />} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>

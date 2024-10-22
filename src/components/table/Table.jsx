@@ -28,8 +28,8 @@ const Table = ({ setParams, params }) => {
     (state) => state?.questions
   );
 
-  const state = useSelector((state) => state?.questions);
-  console.log(state);
+  // const state = useSelector((state) => state?.questions);
+  // console.log(state);
 
   // const { openModal, closeModal } = useModal();
 
@@ -48,11 +48,16 @@ const Table = ({ setParams, params }) => {
   // };
 
   const { questions = [], totalPage: totalPages = 0 } = data || {};
-  console.log("🚀 ~ Table ~ questions:", questions);
+  console.log("🚀 ~ Table ~ totalPages:", params.pageNo);
+  // console.log("🚀 ~ Table ~ questions:", questions);
 
   const handlePageChange = (newPage) => {
-    setParams({ ...params, page: newPage });
+    setParams({ ...params, pageNo: newPage });
   };
+
+  console.log("Params", params);
+
+  console.log(params?.page);
 
   return (
     <div className="p-8 mt-4 overflow-x-auto bg-white shadow-md sm:rounded-lg">
@@ -144,13 +149,13 @@ const Table = ({ setParams, params }) => {
       </table>
       <div className="flex justify-end">
         <Pagination
-          currentPage={params?.page}
+          currentPage={Number(params?.pageNo) || 1}
           totalPages={totalPages}
-          onNextPage={() => handlePageChange(params.page + 1)}
-          onPrevPage={() => handlePageChange(params.page - 1)}
+          onNextPage={() => handlePageChange(Number(params?.pageNo) + 1)}
+          onPrevPage={() => handlePageChange(Number(params?.pageNo) - 1)}
           onPageChange={handlePageChange}
-          hasNext={params.page < totalPages}
-          hasPrev={params.page > 1}
+          hasNext={Number(params?.pageNo) < Number(totalPages)}
+          hasPrev={Number(params?.pageNo) > 1}
         />
       </div>
 
