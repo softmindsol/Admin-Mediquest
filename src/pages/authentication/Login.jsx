@@ -32,7 +32,7 @@ const Login = () => {
       <div className="w-[360px] m-auto ">
         <div className="max-w-full mt-30 mb-60 pb-22">
           <h1 className="mb-5 font-semibold text-center text-title-xl2 text-black-3">
-            Log in
+            Log in to your account
           </h1>
           <p className="mb-6 text-center text-title-p text-secondary">
             Welcome back! Please enter your details.
