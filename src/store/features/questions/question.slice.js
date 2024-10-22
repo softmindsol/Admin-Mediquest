@@ -13,6 +13,7 @@ const initialState = {
     totalQuestions: 0,
     questions: {},
     metadata: {},
+    documentId: "",
   },
 };
 
@@ -49,11 +50,10 @@ const questionSlice = createSlice({
       })
       .addCase(getAllDocQuestions.fulfilled, (state, action) => {
         state.isLoading = false;
-        // state.documentQuestions.currentQuestion = action?.payload?.pageNo;
-        state.documentQuestions.questions =
-          action.payload?.allQuestions?.question;
+        state.documentQuestions.questions = action.payload?.allQuestions;
         state.documentQuestions.totalQuestions = action.payload?.totalQuestions;
         state.documentQuestions.metadata = action.payload?.metadata;
+        state.documentQuestions.documentId = action.payload?.documentId;
       })
       .addCase(getAllDocQuestions.rejected, (state, action) => {
         state.error = action.payload.error;

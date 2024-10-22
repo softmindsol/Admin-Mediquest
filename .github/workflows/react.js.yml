@@ -60,7 +60,7 @@ jobs:
       
     - name: Notify Slack (Deployment Started)
       run: |
-        curl -X POST -H 'Content-type: application/json' --data '{"text":":rocket: *Deployment started!* Starting the deployment for `mediquest-Admin`."}' ${{ secrets.SLACK_WEBHOOK_URL }}
+        curl -X POST -H 'Content-type: application/json' --data '{"text":":rocket: *Deployment started!* Starting the deployment for `Mediquest-Admin`."}' ${{ secrets.SLACK_WEBHOOK_URL }}
     - name: Deploy using deploy.sh script
       run: |
             chmod +x ./deploy.sh
@@ -69,9 +69,9 @@ jobs:
     - name: Notify Slack (Deployment Completed)
       if: success()
       run: |
-        curl -X POST -H 'Content-type: application/json' --data '{"text":":tada: *Deployment complete!* `mediquest-Admin` has been deployed successfully."}' ${{ secrets.SLACK_WEBHOOK_URL }}
+        curl -X POST -H 'Content-type: application/json' --data '{"text":":tada: *Deployment complete!* `Mediquest-Admin` has been deployed successfully."}' ${{ secrets.SLACK_WEBHOOK_URL }}
 
     - name: Notify Slack (Deployment Failed)
       if: failure()
       run: |
-        curl -X POST -H 'Content-type: application/json' --data '{"text":":x: *Deployment failed!* There was an issue deploying `mediquest-Admin`. Investigating now."}' ${{ secrets.SLACK_WEBHOOK_URL }}
+        curl -X POST -H 'Content-type: application/json' --data '{"text":":x: *Deployment failed!* There was an issue deploying `Mediquest-Admin`. Investigating now."}' ${{ secrets.SLACK_WEBHOOK_URL }}

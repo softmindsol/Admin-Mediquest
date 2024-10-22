@@ -3,19 +3,20 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useSearchParams } from "react-router-dom";
 import * as Yup from "yup";
-import EditQuestion from "../../components/EditQuestion";
-import TextEditor from "../../components/TextEditor";
-import DefaultLayout from "../../layouts/DefaultLayout";
 import {
   editQuestion,
   getAllDocQuestions,
 } from "../../store/features/questions/question.service";
+import DefaultLayout from "../../layouts/DefaultLayout";
+import TextEditor from "../../components/TextEditor";
+import EditQuestion from "../../components/EditQuestion";
 
 const Update = () => {
   const [modifiedOptions, setModifiedOptions] = useState([]);
   const [selectedCorrectAnswers, setSelectedCorrectAnswers] = useState([]);
   const {
     totalQuestions = 0,
+    documentId,
     questions = {},
     metadata: metaData = {},
   } = useSelector((state) => state?.questions?.documentQuestions) || {};
@@ -39,7 +40,7 @@ const Update = () => {
   };
   const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [pageNo, setPageNo] = useState();
+  const [pageNo, setPageNo] = useState(1);
   const [image_url, setImageUrl] = useState("");
   const [isDeployed, setIsDeployed] = useState(questions?.deploy);
 
@@ -48,7 +49,7 @@ const Update = () => {
       try {
         const res = await dispatch(
           getAllDocQuestions({
-            pageNo: searchParams.get("pageNo"),
+            pageNo: searchParams.get("pageNo") || 1,
           })
         );
         console.log(res?.payload?.question?.image_url);
@@ -62,7 +63,7 @@ const Update = () => {
     };
 
     fetchQuestion();
-  }, [dispatch, pageNo]);
+  }, [dispatch, searchParams]);
 
   useEffect(() => {
     if (questions && questions.deploy !== undefined) {
@@ -72,16 +73,17 @@ const Update = () => {
 
   const handlePrev = () => {
     if (pageNo > 1) {
-      setPageNo((pageNo) => pageNo - 1);
-      setSearchParams({ pageNo: pageNo - 1 });
+      const newPageNo = pageNo - 1;
+      setPageNo(newPageNo);
+      setSearchParams({ pageNo: newPageNo });
     }
   };
 
   const handleNext = () => {
     if (pageNo < totalQuestions) {
-      setSearchPageNo((prev) => prev + 1);
-      setSearchParams({ pageNo: searchPageNo + 1 });
-      setPageNo(Number(searchPageNo) + 1);
+      const newPageNo = pageNo + 1;
+      setPageNo(newPageNo);
+      setSearchParams({ pageNo: newPageNo });
     }
   };
 
@@ -107,17 +109,18 @@ const Update = () => {
         correct_answers: selectedCorrectAnswers,
       };
 
+      console.log(updatedData);
+
       try {
-        const res = await dispatch(
-          editQuestion({
-            documentId,
-            questionId: questions?._id,
-            image_url: "",
-            image,
-            data: updatedData,
-          })
-        );
-        console.log("Edit Question Response: ", res);
+        const res = await dispatch();
+        // editQuestion({
+        //   documentId,
+        //   questionId: questions?._id,
+        //   image_url: "",
+        //   image,
+        //   data: updatedData,
+        // })
+        // console.log("Edit Question Response: ", res);
       } catch (error) {
         console.error("Error submitting edit: ", error);
       }
@@ -139,17 +142,17 @@ const Update = () => {
         <button
           onClick={handlePrev}
           className="px-4 py-3 text-gray-500 bg-white border border-[#E9ECEF] rounded"
-          disabled={searchPageNo <= 1}
+          disabled={pageNo <= 1}
         >
           &lt; Prev
         </button>
         <div className="px-4 py-3 bg-[#3A57E8] text-white border border-[#7749F8] rounded">
-          {searchPageNo} of {totalQuestions}
+          {pageNo} of {totalQuestions}
         </div>
         <button
           onClick={handleNext}
           className="px-4 py-3 text-gray-500 bg-white border border-[#E9ECEF] rounded"
-          disabled={searchPageNo >= totalQuestions}
+          disabled={pageNo >= totalQuestions}
         >
           Next &gt;
         </button>
