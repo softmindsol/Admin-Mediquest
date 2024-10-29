@@ -6,12 +6,12 @@ import { useDispatch, useSelector } from "react-redux";
 import Loader from "../Loader";
 import { useModal } from "../../context/modal";
 import WarningModal from "../Modal/WarningModal";
-// import Modal from "../modal";
 import {
   deleteQuestion,
   getAllQuestions,
 } from "../../store/features/questions/question.service";
 import { Link } from "react-router-dom";
+import Modal from "../Modal";
 
 // Updated columns based on the screenshot design
 const columns = [
