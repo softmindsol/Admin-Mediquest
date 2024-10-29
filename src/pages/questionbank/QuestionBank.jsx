@@ -75,7 +75,7 @@ const QuestionBank = () => {
               className="hidden"
               onChange={handleFileUpload}
             />
-          </label>
+          </label>  
           <Link to="/update-questions">
             <button className="bg-[#007AFF] text-white text-title-p font-semibold py-2 px-4 rounded-md">
               Switch to Individual view

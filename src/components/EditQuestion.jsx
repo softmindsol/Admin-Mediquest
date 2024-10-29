@@ -7,7 +7,7 @@ const EditQuestion = ({
   setModifiedOptions,
   selectedCorrectAnswers,
   setSelectedCorrectAnswers,
-}) => {
+}) => { 
   const { questions = {} } =
     useSelector((state) => state?.questions?.documentQuestions) || {};
 

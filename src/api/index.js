@@ -12,64 +12,64 @@ const axiosWithoutToken = axios.create({
 });
 
 const MAX_RETRY_COUNT = 1;
-axiosWithoutToken.interceptors.response.use(
-  (response) => response,
-  async (error) => {
-    const originalRequest = error.config;
+// axiosWithoutToken.interceptors.response.use(
+//   (response) => response,
+//   async (error) => {
+//     const originalRequest = error.config;
 
-    if (
-      error.response &&
-      error.response.status === 401 &&
-      !originalRequest._retry
-    ) {
-      originalRequest._retry = true;
-      originalRequest._retryCount = (originalRequest._retryCount || 0) + 1;
+//     if (
+//       error.response &&
+//       error.response.status === 401 &&
+//       !originalRequest._retry
+//     ) {
+//       originalRequest._retry = true;
+//       originalRequest._retryCount = (originalRequest._retryCount || 0) + 1;
 
-      if (originalRequest._retryCount > MAX_RETRY_COUNT) {
-        return Promise.reject(new Error("Max retry attempts reached"));
-      }
+//       if (originalRequest._retryCount > MAX_RETRY_COUNT) {
+//         return Promise.reject(new Error("Max retry attempts reached"));
+//       }
 
-      console.log(error);
+//       console.log(error);
 
-      try {
-        const response = await axiosWithoutToken.post(
-          "/admin/refresh-access-token",
-          {},
-          { withCredentials: true }
-        );
+//       try {
+//         const response = await axiosWithoutToken.post(
+//           "/admin/refresh-access-token",
+//           {},
+//           { withCredentials: true }
+//         );
 
-        console.log("Hellooooooo");
+//         console.log("Hellooooooo");
 
-        console.log("🚀 ~ response:", response);
+//         console.log("🚀 ~ response:", response);
 
-        if (response.data.status === 400) {
-          console.log("Hello");
+//         if (response.data.status === 400) {
+//           console.log("Hello");
 
-          localStorage.removeItem("isLoggedIn");
-          window.location.href = "/log-in";
-          // toast.error("Login again");
-          console.log("Hello");
+//           localStorage.removeItem("isLoggedIn");
+//           window.location.href = "/log-in";
+//           // toast.error("Login again");
+//           console.log("Hello");
 
-          return Promise.reject("Error");
-        }
+//           return Promise.reject("Error");
+//         }
 
-        return axiosWithoutToken(originalRequest);
-      } catch (err) {
-        console.log("🚀 ~ err:", err);
-        console.log(err.response.status === 401);
+//         return axiosWithoutToken(originalRequest);
+//       } catch (err) {
+//         console.log("🚀 ~ err:", err);
+//         console.log(err.response.status === 401);
 
-        if (err.response && err.response.data.status === 401) {
-          localStorage.removeItem("isLoggedIn");
-          window.location.href = "/log-in";
-        }
+//         if (err.response && err.response.data.status === 401) {
+//           localStorage.removeItem("isLoggedIn");
+//           window.location.href = "/log-in";
+//         }
 
-        return Promise.reject(err);
-      }
-    }
+//         return Promise.reject(err);
+//       }
+//     }
 
-    return Promise.reject(error);
-  }
-);
+//     return Promise.reject(error);
+//   }
+// );
 // axiosWithoutToken.interceptors.response.use(
 //   (response) => response,
 //   async (error) => {
