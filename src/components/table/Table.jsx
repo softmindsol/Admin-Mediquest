@@ -4,9 +4,9 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import Pagination from "../Pagination";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../Loader";
-// import { useModal } from "../../context/modal";
+import { useModal } from "../../context/modal";
 import WarningModal from "../Modal/WarningModal";
-import Modal from "../modal";
+// import Modal from "../modal";
 import {
   deleteQuestion,
   getAllQuestions,
@@ -31,21 +31,21 @@ const Table = ({ setParams, params }) => {
   const state = useSelector((state) => state?.questions);
   console.log(state);
 
-  // const { openModal, closeModal } = useModal();
+  const { openModal, closeModal } = useModal();
 
-  // const openWarningModal = (documentId, questionId) => {
-  //   openModal(
-  //     <WarningModal
-  //       onClick={async () => {
-  //         await dispatch(deleteQuestion({ documentId, questionId }));
-  //         dispatch(getAllQuestions());
-  //         closeModal();
-  //       }}
-  //       closeModal={closeModal}
-  //       description="This will delete the question?"
-  //     />
-  //   );
-  // };
+  const openWarningModal = (documentId, questionId) => {
+    openModal(
+      <WarningModal
+        onClick={async () => {
+          await dispatch(deleteQuestion({ documentId, questionId }));
+          dispatch(getAllQuestions());
+          closeModal();
+        }}
+        closeModal={closeModal}
+        description="This will delete the question?"
+      />
+    );
+  };
 
   const pageNo = Number(params?.pageNo) || 1;
   const { questions = [], totalPage: totalPages = 0 } = data || {};
@@ -112,9 +112,9 @@ const Table = ({ setParams, params }) => {
                         </button>
                       </Link>
                       <button
-                        // onClick={() =>
-                        //   openWarningModal(row?.documentId, row?.questionId)
-                        // }
+                        onClick={() =>
+                          openWarningModal(row?.documentId, row?.questionId)
+                        }
                         className="p-2 font-medium text-red-600 transition-all duration-300 rounded-full cursor-pointer hover:bg-red-100"
                       >
                         <RiDeleteBin6Line
@@ -154,7 +154,7 @@ const Table = ({ setParams, params }) => {
         />
       </div>
 
-      {/* <Modal /> */}
+      <Modal />
     </div>
   );
 };
