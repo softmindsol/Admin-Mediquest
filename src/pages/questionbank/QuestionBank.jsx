@@ -33,14 +33,9 @@ const QuestionBank = () => {
 
           const res = await dispatch(uploadQuestions(json));
 
-          console.log(res.type === "uploadQuestion/fulfilled");
-
           if (res.type === "uploadQuestion/fulfilled") {
-            console.log("Why not working...");
-
             await dispatch(getAllQuestions());
           }
-          console.log("🚀 ~ reader.onload= ~ res:", res);
         } catch (err) {
           console.error("Invalid JSON file", err);
         }
@@ -75,7 +70,7 @@ const QuestionBank = () => {
               className="hidden"
               onChange={handleFileUpload}
             />
-          </label>  
+          </label>
           <Link to="/update-questions">
             <button className="bg-[#007AFF] text-white text-title-p font-semibold py-2 px-4 rounded-md">
               Switch to Individual view
