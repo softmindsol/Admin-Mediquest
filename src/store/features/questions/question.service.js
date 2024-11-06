@@ -1,12 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
-import { axiosWithoutToken } from "../../../api";
+import { axiosWithToken } from "../../../api";
 
 export const uploadQuestions = createAsyncThunk(
   "uploadQuestion",
   async (formData, { rejectWithValue }) => {
     try {
-      const response = await axiosWithoutToken.post(
+      const response = await axiosWithToken.post(
         "/questions/add-questions",
         formData,
         {
@@ -56,7 +56,7 @@ export const getAllQuestions = createAsyncThunk(
         ...(pageNo !== undefined && { pageNo }),
       };
 
-      const response = await axiosWithoutToken.get(`/questions/get-questions`, {
+      const response = await axiosWithToken.get(`/questions/get-questions`, {
         params,
       });
 
@@ -75,7 +75,7 @@ export const deleteQuestion = createAsyncThunk(
     console.log("Hello from delete request", documentId, questionId);
 
     try {
-      const response = await axiosWithoutToken.delete(
+      const response = await axiosWithToken.delete(
         `/questions/delete-question/${documentId}/${questionId}`
       );
       toast.success(response?.data?.message);
@@ -94,7 +94,7 @@ export const deleteQuestion = createAsyncThunk(
 //   "getSingleQuestion",
 //   async ({ documentId, questionId }, { rejectWithValue }) => {
 //     try {
-//       const response = await axiosWithoutToken.patch(
+//       const response = await axiosWithToken.patch(
 //         `/questions/get-single-question/${documentId}/${questionId}`
 //       );
 //       console.log(response.data);
@@ -112,7 +112,7 @@ export const editQuestion = createAsyncThunk(
   async ({ documentId, questionId, data }, { rejectWithValue }) => {
     console.log("🚀 ~ data:", data);
     try {
-      const response = await axiosWithoutToken.patch(
+      const response = await axiosWithToken.patch(
         `/questions/update-question/${documentId}/${questionId}`,
         data
       );
@@ -133,7 +133,7 @@ export const getDocumentQuestion = createAsyncThunk(
     console.log("🚀 ~ pageNo:", pageNo);
     console.log("🚀 ~ documentId:", documentId);
     try {
-      const response = await axiosWithoutToken.get(
+      const response = await axiosWithToken.get(
         `/questions/get-doc-question/${documentId}?pageNo=${pageNo}`
       );
       console.log(response.data);
@@ -157,7 +157,7 @@ export const getQuestion = createAsyncThunk(
     }
 
     try {
-      const response = await axiosWithoutToken.get(
+      const response = await axiosWithToken.get(
         `/questions/get-question/${documentId}/${questionId}`,
         {
           params,

@@ -18,10 +18,10 @@ const authSlice = createSlice({
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(loginAdmin.fulfilled, (state, action) => {
+      .addCase(loginAdmin.fulfilled, (state, _) => {
         state.isLoggedIn = true;
         state.isLoading = false;
-        localStorage.setItem("isLoggedIn", true)
+        localStorage.setItem("user", true);
       })
       .addCase(loginAdmin.rejected, (state, action) => {
         state.isLoading = false;
@@ -40,6 +40,7 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.isLoggedIn = false;
         state.error = action.payload;
+        localStorage.removeItem("user");
       })
 
       .addCase(logout.pending, (state) => {
@@ -50,8 +51,7 @@ const authSlice = createSlice({
         state.user = null;
         state.isLoggedIn = false;
         state.isLoading = false;
-        localStorage.removeItem("isLoggedIn");
-
+        localStorage.removeItem("user");
       })
       .addCase(logout.rejected, (state, action) => {
         state.isLoading = false;

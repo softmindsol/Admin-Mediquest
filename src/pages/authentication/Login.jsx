@@ -7,6 +7,7 @@ import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import { useDispatch } from "react-redux";
 import { loginAdmin } from "../../store/features/auth/auth.service";
+import encryptPassword from "../../utils/encrypt";
 
 const inputFields = [
   {
@@ -47,8 +48,14 @@ const Login = () => {
             onSubmit={async (values, { setSubmitting, resetForm }) => {
               setSubmitting(true);
 
+              const encodedPassword = encryptPassword(values.password);
               try {
-                const response = await dispatch(loginAdmin(values));
+                const response = await dispatch(
+                  loginAdmin({
+                    email: values.email,
+                    password: encodedPassword,
+                  })
+                );
 
                 if (response.type === "loginAdmin/fulfilled") {
                   navigate("/");

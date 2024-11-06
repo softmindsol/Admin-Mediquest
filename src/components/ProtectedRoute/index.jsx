@@ -6,7 +6,7 @@ import { useEffect } from "react";
 
 const ProtectedRoute = ({ children }) => {
   const location = useLocation();
-  const isAdminLoggedIn = localStorage.getItem("isLoggedIn");
+  const isAdminLoggedIn = localStorage.getItem("user");
   console.log("🚀 ~ ProtectedRoute ~ isAdminLoggedIn:", isAdminLoggedIn);
   const pathname = location.pathname;
 
@@ -26,7 +26,6 @@ const ProtectedRoute = ({ children }) => {
     return <Navigate to="/" replace />;
   }
 
-  console.log("Hello.....");
 
   if (!isAdminLoggedIn && !isLoggedIn) {
     return <Navigate to="/log-in" replace />;

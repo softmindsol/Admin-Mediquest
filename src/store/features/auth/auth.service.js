@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
-import { apiClient, axiosWithoutToken } from "../../../api/index";
+import { apiClient, axiosWithToken } from "../../../api/index";
 export const loginAdmin = createAsyncThunk(
   "loginAdmin",
   async (data, { rejectWithValue }) => {
@@ -22,7 +22,7 @@ export const changePassword = createAsyncThunk(
   "changePassword",
   async (data, { rejectWithValue }) => {
     try {
-      const response = await axiosWithoutToken.post(
+      const response = await axiosWithToken.post(
         "/admin/change-password",
         data
       );
@@ -42,7 +42,7 @@ export const logout = createAsyncThunk(
   "logout",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axiosWithoutToken.post("/admin/logout");
+      const response = await axiosWithToken.post("/admin/logout");
       console.log("🚀 ~ response:", response);
 
       toast.success(response?.data?.message);
@@ -60,7 +60,7 @@ export const verifyToken = createAsyncThunk(
   "verifyToken",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axiosWithoutToken.get("/admin/verifyAdminToken");
+      const response = await axiosWithToken.get("/admin/verifyAdminToken");
 
       return response?.data?.data?.isLoggedIn;
     } catch (error) {

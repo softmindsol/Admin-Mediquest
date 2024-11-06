@@ -4,7 +4,7 @@ import { Navigate, useLocation } from "react-router-dom";
 const LoginRoute = ({ children }) => {
   const isLoggedIn = useSelector((state) => state?.admin?.isLoggedIn);
   console.log("🚀 ~ LoginRoute ~ isLoggedIn:", isLoggedIn);
-  const isAdminLoggedIn = localStorage.getItem("isLoggedIn");
+  const isAdminLoggedIn = localStorage.getItem("user");
   const location = useLocation();
 
   // const [isLoggedIn, setLoggedIn] = useState(false);
