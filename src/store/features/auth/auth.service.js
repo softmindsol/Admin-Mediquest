@@ -43,7 +43,6 @@ export const logout = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axiosWithToken.post("/admin/logout");
-      console.log("🚀 ~ response:", response);
 
       toast.success(response?.data?.message);
       return response.data;

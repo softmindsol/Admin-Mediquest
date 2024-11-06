@@ -7,7 +7,6 @@ import { useEffect } from "react";
 const ProtectedRoute = ({ children }) => {
   const location = useLocation();
   const isAdminLoggedIn = localStorage.getItem("user");
-  console.log("🚀 ~ ProtectedRoute ~ isAdminLoggedIn:", isAdminLoggedIn);
   const pathname = location.pathname;
 
   const { isLoggedIn, isLoading } = useSelector((state) => state?.admin);

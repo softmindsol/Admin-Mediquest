@@ -10,6 +10,7 @@ import {
 import DefaultLayout from "../../layouts/DefaultLayout";
 import TextEditor from "../../components/TextEditor";
 import EditQuestion from "../../components/EditQuestion";
+import toast from "react-hot-toast";
 
 const Update = () => {
   const [modifiedOptions, setModifiedOptions] = useState([]);
@@ -22,11 +23,12 @@ const Update = () => {
   } = useSelector((state) => state?.questions?.documentQuestions) || {};
   const [image, setImage] = useState(null);
 
-
   const { isLoading } = useSelector((state) => state?.questions || {});
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
+
+    if (!file) return toast.error("Please select an image file");
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
@@ -67,13 +69,11 @@ const Update = () => {
             pageNo: searchParams.get("pageNo") || 1,
           })
         );
-        console.log(res?.payload?.allQuestions?.image_url);
 
         if (res.type === "getAllDocQuestions/fulfilled") {
           setImage(res?.payload?.allQuestions?.image_url);
           setImageUrl(res?.payload?.allQuestions?.image_url);
         }
-        console.log("API Response: ", res);
       } catch (error) {
         console.error("Error fetching question: ", error);
       }
@@ -136,7 +136,6 @@ const Update = () => {
             data: updatedData,
           })
         );
-        console.log("Edit Question Response: ", res);
       } catch (error) {
         console.error("Error submitting edit: ", error);
       }
@@ -309,6 +308,7 @@ const Update = () => {
             Upload new Image
             <input
               type="file"
+              accept="image/*"
               onChange={handleImageUpload}
               className="hidden"
             />

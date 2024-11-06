@@ -30,7 +30,6 @@ const Settings = () => {
   const navigate = useNavigate();
   const handleLogout = async () => {
     const res = await dispatch(logout());
-    console.log("🚀 ~ handleLogout ~ res:", res);
 
     if (res.type === "logout/fulfilled") {
       navigate("/log-in");

@@ -107,7 +107,6 @@ axiosWithToken.interceptors.response.use(
         );
 
         if (response.data.status === 400) {
-
           localStorage.removeItem("user");
           setTimeout(() => {
             window.location.href = `${
@@ -119,9 +118,6 @@ axiosWithToken.interceptors.response.use(
 
         return axiosWithToken(originalRequest);
       } catch (err) {
-        console.log("🚀 ~ err:", err);
-        console.log(err.response.status === 401);
-
         if (err.response && err.response.data.status === 401) {
           localStorage.removeItem("user");
           setTimeout(() => {

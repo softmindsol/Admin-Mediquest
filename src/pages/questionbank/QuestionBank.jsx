@@ -9,6 +9,7 @@ import {
 } from "../../store/features/questions/question.service";
 import { useDispatch } from "react-redux";
 import useDebouncedEffect from "../../hooks/useDebounce";
+import toast from "react-hot-toast";
 
 const QuestionBank = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -25,6 +26,8 @@ const QuestionBank = () => {
 
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
+
+    if (!file) toast.error("Please select a json file to upload.");
     if (file) {
       const reader = new FileReader();
       reader.onload = async (e) => {

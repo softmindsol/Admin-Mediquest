@@ -29,7 +29,6 @@ const Home = () => {
       reader.onload = async (e) => {
         try {
           const json = JSON.parse(e.target.result);
-          console.log("🚀 ~ reader.onload= ~ json:", json);
           // const formData = new FormData();
           // formData.append(
           //   "question",

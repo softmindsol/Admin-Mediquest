@@ -65,12 +65,10 @@ const EditQuestions = () => {
             pageNo: searchParams.get("pageNo"),
           })
         );
-        console.log(res?.payload?.question?.image_url);
 
         setSearchPageNo(res?.payload?.pageNo);
         setImage(res?.payload?.question?.image_url);
         setImageUrl(res?.payload?.question?.image_url);
-        console.log("API Response: ", res);
       } catch (error) {
         console.error("Error fetching question: ", error);
       }
@@ -135,7 +133,6 @@ const EditQuestions = () => {
             data: updatedData,
           })
         );
-        console.log("Edit Question Response: ", res);
       } catch (error) {
         console.error("Error submitting edit: ", error);
       }
