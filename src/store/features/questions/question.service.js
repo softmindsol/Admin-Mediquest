@@ -19,7 +19,6 @@ export const uploadQuestions = createAsyncThunk(
       return response.data;
     } catch (error) {
       if (error) {
-        console.log(error);
         toast.error(error?.response?.data?.error);
         return rejectWithValue(error);
       }
@@ -62,7 +61,6 @@ export const getAllQuestions = createAsyncThunk(
 
       return response?.data?.data;
     } catch (error) {
-      console.log(error);
       toast.error(error?.response?.data?.error);
       return rejectWithValue(error);
     }
@@ -72,18 +70,14 @@ export const getAllQuestions = createAsyncThunk(
 export const deleteQuestion = createAsyncThunk(
   "deleteQuestion",
   async ({ documentId, questionId }, { rejectWithValue }) => {
-    console.log("Hello from delete request", documentId, questionId);
-
     try {
       const response = await axiosWithToken.delete(
         `/questions/delete-question/${documentId}/${questionId}`
       );
       toast.success(response?.data?.message);
-      console.log(response.data);
 
       return response?.data?.data;
     } catch (error) {
-      console.log(error);
       toast.error(error?.response?.data?.error);
       return rejectWithValue(error);
     }
@@ -97,10 +91,8 @@ export const deleteQuestion = createAsyncThunk(
 //       const response = await axiosWithToken.patch(
 //         `/questions/get-single-question/${documentId}/${questionId}`
 //       );
-//       console.log(response.data);
 //       return response?.data;
 //     } catch (error) {
-//       console.log(error);
 //       toast.error(error?.response?.data?.error);
 //       return rejectWithValue(error);
 //     }
@@ -110,17 +102,14 @@ export const deleteQuestion = createAsyncThunk(
 export const editQuestion = createAsyncThunk(
   "editQuestion",
   async ({ documentId, questionId, data }, { rejectWithValue }) => {
-    console.log("🚀 ~ data:", data);
     try {
       const response = await axiosWithToken.patch(
         `/questions/update-question/${documentId}/${questionId}`,
         data
       );
       toast.success(response?.data?.message);
-      console.log(response.data);
       return response?.data;
     } catch (error) {
-      console.log(error);
       toast.error(error?.response?.data?.error);
       return rejectWithValue(error);
     }
@@ -130,17 +119,13 @@ export const editQuestion = createAsyncThunk(
 export const getDocumentQuestion = createAsyncThunk(
   "getDocumentQuestions",
   async ({ documentId, pageNo }) => {
-    console.log("🚀 ~ pageNo:", pageNo);
-    console.log("🚀 ~ documentId:", documentId);
     try {
       const response = await axiosWithToken.get(
         `/questions/get-doc-question/${documentId}?pageNo=${pageNo}`
       );
-      console.log(response.data);
 
       return response?.data;
     } catch (error) {
-      console.log(error);
       toast.error(error?.response?.data?.error);
       return rejectWithValue(error);
     }
@@ -164,16 +149,33 @@ export const getQuestion = createAsyncThunk(
         }
       );
 
-      console.log(response?.data?.data);
-
       return response?.data?.data;
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error);
     }
   }
 );
 
+export const getAllDocQuestions = createAsyncThunk(
+  "getAllDocQuestions",
+  async ({ pageNo }, { rejectWithValue }) => {
+    const params = {};
 
+    if (pageNo) {
+      params.pageNo = pageNo;
+    }
 
+    try {
+      const response = await axiosWithoutToken.get(
+        `/questions/get-all-questions`,
+        {
+          params,
+        }
+      );
 
+      return response?.data?.data;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);

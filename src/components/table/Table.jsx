@@ -6,12 +6,12 @@ import { useDispatch, useSelector } from "react-redux";
 import Loader from "../Loader";
 import { useModal } from "../../context/modal";
 import WarningModal from "../Modal/WarningModal";
-// import Modal from "../modal";
 import {
   deleteQuestion,
   getAllQuestions,
 } from "../../store/features/questions/question.service";
 import { Link } from "react-router-dom";
+import Modal from "../Modal";
 
 // Updated columns based on the screenshot design
 const columns = [
@@ -31,27 +31,27 @@ const Table = ({ setParams, params }) => {
   const state = useSelector((state) => state?.questions);
   console.log(state);
 
-  // const { openModal, closeModal } = useModal();
+  const { openModal, closeModal } = useModal();
 
-  // const openWarningModal = (documentId, questionId) => {
-  //   openModal(
-  //     <WarningModal
-  //       onClick={async () => {
-  //         await dispatch(deleteQuestion({ documentId, questionId }));
-  //         dispatch(getAllQuestions());
-  //         closeModal();
-  //       }}
-  //       closeModal={closeModal}
-  //       description="This will delete the question?"
-  //     />
-  //   );
-  // };
+  const openWarningModal = (documentId, questionId) => {
+    openModal(
+      <WarningModal
+        onClick={async () => {
+          await dispatch(deleteQuestion({ documentId, questionId }));
+          dispatch(getAllQuestions());
+          closeModal();
+        }}
+        closeModal={closeModal}
+        description="This will delete the question?"
+      />
+    );
+  };
 
+  const pageNo = Number(params?.pageNo) || 1;
   const { questions = [], totalPage: totalPages = 0 } = data || {};
-  console.log("🚀 ~ Table ~ questions:", questions);
 
   const handlePageChange = (newPage) => {
-    setParams({ ...params, page: newPage });
+    setParams({ ...params, pageNo: newPage });
   };
 
   return (
@@ -112,9 +112,9 @@ const Table = ({ setParams, params }) => {
                         </button>
                       </Link>
                       <button
-                        // onClick={() =>
-                        //   openWarningModal(row?.documentId, row?.questionId)
-                        // }
+                        onClick={() =>
+                          openWarningModal(row?.documentId, row?.questionId)
+                        }
                         className="p-2 font-medium text-red-600 transition-all duration-300 rounded-full cursor-pointer hover:bg-red-100"
                       >
                         <RiDeleteBin6Line
@@ -144,17 +144,17 @@ const Table = ({ setParams, params }) => {
       </table>
       <div className="flex justify-end">
         <Pagination
-          currentPage={params?.page}
+          currentPage={pageNo}
           totalPages={totalPages}
-          onNextPage={() => handlePageChange(params.page + 1)}
-          onPrevPage={() => handlePageChange(params.page - 1)}
+          onNextPage={() => handlePageChange(pageNo + 1)}
+          onPrevPage={() => handlePageChange(pageNo - 1)}
           onPageChange={handlePageChange}
-          hasNext={params.page < totalPages}
-          hasPrev={params.page > 1}
+          hasNext={pageNo < Number(totalPages)}
+          hasPrev={pageNo > 1}
         />
       </div>
 
-      {/* <Modal /> */}
+      <Modal />
     </div>
   );
 };
