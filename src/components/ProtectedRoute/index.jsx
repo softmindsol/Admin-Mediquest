@@ -20,7 +20,12 @@ const ProtectedRoute = ({ children }) => {
     }
   }, [dispatch, isLoggedIn]);
 
-  if (isLoading) return <Loader />;
+  if (isLoading)
+    return (
+      <div className="flex items-center justify-center h-screen bg-white">
+        <Loader />
+      </div>
+    );
 
   if (isLoggedIn && pathname === "/log-in") {
     return <Navigate to="/" replace />;

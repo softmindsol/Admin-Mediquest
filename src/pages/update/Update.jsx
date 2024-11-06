@@ -23,7 +23,7 @@ const Update = () => {
   const [image, setImage] = useState(null);
 
 
-  const { isLoading } = useSelector((state) => state?.questions);
+  const { isLoading } = useSelector((state) => state?.questions || {});
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];

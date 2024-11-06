@@ -19,7 +19,8 @@ export const uploadQuestions = createAsyncThunk(
       return response.data;
     } catch (error) {
       if (error) {
-        toast.error(error?.response?.data?.error);
+        error?.response?.data?.error &&
+          toast.error(error?.response?.data?.error);
         return rejectWithValue(error);
       }
     }
@@ -61,7 +62,7 @@ export const getAllQuestions = createAsyncThunk(
 
       return response?.data?.data;
     } catch (error) {
-      toast.error(error?.response?.data?.error);
+      error?.response?.data?.error && toast.error(error?.response?.data?.error);
       return rejectWithValue(error);
     }
   }
@@ -78,7 +79,7 @@ export const deleteQuestion = createAsyncThunk(
 
       return response?.data?.data;
     } catch (error) {
-      toast.error(error?.response?.data?.error);
+      error?.response?.data?.error && toast.error(error?.response?.data?.error);
       return rejectWithValue(error);
     }
   }
@@ -110,7 +111,7 @@ export const editQuestion = createAsyncThunk(
       toast.success(response?.data?.message);
       return response?.data;
     } catch (error) {
-      toast.error(error?.response?.data?.error);
+      error?.response?.data?.error && toast.error(error?.response?.data?.error);
       return rejectWithValue(error);
     }
   }
@@ -126,7 +127,7 @@ export const getDocumentQuestion = createAsyncThunk(
 
       return response?.data;
     } catch (error) {
-      toast.error(error?.response?.data?.error);
+      error?.response?.data?.error && toast.error(error?.response?.data?.error);
       return rejectWithValue(error);
     }
   }
@@ -166,7 +167,7 @@ export const getAllDocQuestions = createAsyncThunk(
     }
 
     try {
-      const response = await axiosWithoutToken.get(
+      const response = await axiosWithToken.get(
         `/questions/get-all-questions`,
         {
           params,
