@@ -62,7 +62,14 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route path="/update-questions" element={<Update />} />
+        <Route
+          path="/update-questions"
+          element={
+            <ProtectedRoute>
+              <Update />
+            </ProtectedRoute>
+          }
+        />
 
         <Route path="*" element={<NotFound />} />
       </Routes>
