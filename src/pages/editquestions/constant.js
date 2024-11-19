@@ -97,3 +97,21 @@ export const modulesArray = [
   { value: "ORL - Ophtalmologie", name: "ORL - Ophtalmologie" },
   { value: "Urologie - Néphrologie", name: "Urologie - Néphrologie" },
 ];
+
+
+
+export const uniqueCities = [
+  { value: "Oujda", name: "Oujda" },
+  { value: "Fes", name: "Fes" },
+  { value: "Rabat", name: "Rabat" },
+  { value: "Marrakech", name: "Marrakech" },
+  { value: "Casablanca", name: "Casablanca" },
+  { value: "Tanger", name: "Tanger" },
+  { value: "Agadir", name: "Agadir" },
+  { value: "Béni Mellal", name: "Béni Mellal" },
+  { value: "Dakhla", name: "Dakhla" },
+  { value: "Benguerir", name: "Benguerir" },
+  { value: "Errachidia", name: "Errachidia" },
+  { value: "Guelmim", name: "Guelmim" },
+  { value: "Laayoune", name: "Laayoune" },
+];

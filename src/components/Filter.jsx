@@ -1,6 +1,7 @@
 import React from "react";
 import { FaFileImport } from "react-icons/fa";
 import { IoSearch } from "react-icons/io5";
+import { modulesArray, uniqueCities } from "../pages/editquestions/constant";
 
 const Filter = ({ params, setParams }) => {
   const handleChange = (event) => {
@@ -28,10 +29,12 @@ const Filter = ({ params, setParams }) => {
         name="topic"
         value={params?.topic}
         onChange={handleChange}
-        className="border border-[#EEEEEE] focus:outline-none text-[14px] font-bold text-[#211C1B] bg-white rounded px-4 py-3"
+        className="border w-28 border-[#EEEEEE] focus:outline-none text-[14px] font-bold text-[#211C1B] bg-white rounded px-4 py-3"
       >
         <option value="">Topic</option>
-        <option value="Biochimie">Biochimie</option>
+        {modulesArray.map((module) => (
+          <option value={module.value}>{module.name}</option>
+        ))}
       </select>
 
       <select
@@ -52,10 +55,12 @@ const Filter = ({ params, setParams }) => {
         name="city"
         value={params?.city}
         onChange={handleChange}
-        className="border border-[#EEEEEE] focus:outline-none text-[14px] font-bold text-[#211C1B] bg-white rounded px-4 py-3"
+        className="border w-28 border-[#EEEEEE] focus:outline-none text-[14px] font-bold text-[#211C1B] bg-white rounded px-4 py-3"
       >
         <option value="">City</option>
-        <option value="Rabat">Rabat</option>
+        {uniqueCities.map((city) => (
+          <option value={city.value}>{city.name}</option>
+        ))}
       </select>
 
       <input
