@@ -12,6 +12,7 @@ import TextEditor from "../../components/TextEditor";
 import EditQuestion from "../../components/EditQuestion";
 import toast from "react-hot-toast";
 import Loader from "../../components/Loader";
+import { modulesArray } from "../editquestions/constant";
 
 const Update = () => {
   const [loading, setLoading] = useState(false);
@@ -216,9 +217,22 @@ const Update = () => {
               className="w-32 px-4 py-3 focus:outline-none border border-[#949494] bg-white rounded-2xl"
             >
               <option value="">Select</option>
+
+              <option value="2021">2014</option>
+              <option value="2021">2015</option>
+              <option value="2021">2016</option>
+              <option value="2021">2017</option>
+              <option value="2021">2018</option>
+
               <option value="2019">2019</option>
               <option value="2020">2020</option>
               <option value="2021">2021</option>
+              <option value="2021">2022</option>
+              <option value="2021">2023</option>
+
+              <option value="2021">2024</option>
+
+              <option value="2021">2025</option>
             </select>
             {formik.touched.exam_year && formik.errors.exam_year && (
               <span className="text-sm text-red-500">
@@ -239,7 +253,9 @@ const Update = () => {
               className="w-32 px-4 py-3 focus:outline-none border border-[#949494] bg-white rounded-2xl"
             >
               <option value="">Select</option>
-              <option value="Biochimie">Biochimie</option>
+              {modulesArray.map((module) => (
+                <option value={module.value}>{module.name}</option>
+              ))}{" "}
             </select>
             {formik.touched.topic && formik.errors.topic && (
               <span className="text-sm text-red-500">
