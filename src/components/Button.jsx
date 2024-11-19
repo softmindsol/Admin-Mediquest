@@ -2,7 +2,7 @@ import React from "react";
 
 const Button = ({
   type,
-  disabled,
+  disabled = false,
   text,
   onClick,
   className: styles,

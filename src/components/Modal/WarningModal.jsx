@@ -43,6 +43,7 @@ const WarningModal = ({
         <Button
           className="text-sm flex justify-center items-center text-[white] py-2.5 px-3 bg-red-500 rounded-md hover:bg-[#FF0000] font-bold hover:text-white"
           onClick={onClick}
+          disabled={isLoading}
         >
           {isLoading ? (
             <>
