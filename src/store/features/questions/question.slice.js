@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
+  deleteQuestion,
   getAllDocQuestions,
   getAllQuestions,
   getQuestion,
@@ -56,6 +57,15 @@ const questionSlice = createSlice({
         state.documentQuestions.documentId = action.payload?.documentId;
       })
       .addCase(getAllDocQuestions.rejected, (state, action) => {
+        state.error = action.payload.error;
+      })
+      .addCase(deleteQuestion.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteQuestion.fulfilled, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(deleteQuestion.rejected, (state, action) => {
         state.error = action.payload.error;
       });
   },

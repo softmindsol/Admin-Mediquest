@@ -1,17 +1,17 @@
 import React from "react";
 import { GrEdit } from "react-icons/gr";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import Pagination from "../Pagination";
 import { useDispatch, useSelector } from "react-redux";
-import Loader from "../Loader";
+import { Link } from "react-router-dom";
 import { useModal } from "../../context/modal";
-import WarningModal from "../Modal/WarningModal";
 import {
   deleteQuestion,
   getAllQuestions,
 } from "../../store/features/questions/question.service";
-import { Link } from "react-router-dom";
+import Loader from "../Loader";
 import Modal from "../Modal";
+import WarningModal from "../Modal/WarningModal";
+import Pagination from "../Pagination";
 
 // Updated columns based on the screenshot design
 const columns = [
@@ -28,8 +28,6 @@ const Table = ({ setParams, params }) => {
     (state) => state?.questions
   );
 
-  const state = useSelector((state) => state?.questions);
-
   const { openModal, closeModal } = useModal();
 
   const openWarningModal = (documentId, questionId) => {
@@ -37,8 +35,8 @@ const Table = ({ setParams, params }) => {
       <WarningModal
         onClick={async () => {
           await dispatch(deleteQuestion({ documentId, questionId }));
-          dispatch(getAllQuestions());
           closeModal();
+          dispatch(getAllQuestions());
         }}
         closeModal={closeModal}
         description="This will delete the question?"

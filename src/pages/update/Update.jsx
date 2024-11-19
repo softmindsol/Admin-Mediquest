@@ -11,8 +11,10 @@ import DefaultLayout from "../../layouts/DefaultLayout";
 import TextEditor from "../../components/TextEditor";
 import EditQuestion from "../../components/EditQuestion";
 import toast from "react-hot-toast";
+import Loader from "../../components/Loader";
 
 const Update = () => {
+  const [loading, setLoading] = useState(false);
   const [modifiedOptions, setModifiedOptions] = useState([]);
   const [selectedCorrectAnswers, setSelectedCorrectAnswers] = useState([]);
   const {
@@ -127,6 +129,7 @@ const Update = () => {
       };
 
       try {
+        setLoading(true);
         const res = await dispatch(
           editQuestion({
             documentId,
@@ -136,6 +139,7 @@ const Update = () => {
             data: updatedData,
           })
         );
+        setLoading(false);
       } catch (error) {
         console.error("Error submitting edit: ", error);
       }
@@ -248,10 +252,15 @@ const Update = () => {
         <div className="flex items-center space-x-4">
           <button
             type="button"
+            disabled={loading}
             className="px-6 py-2 text-white bg-[#007AFF] font-semibold rounded-2xl"
             onClick={formik.handleSubmit}
           >
-            Save
+            {loading ? (
+              <Loader className="w-5 h-5 border-white border-solid rounded-full animate-spin-1.5 border-t-transparent border-2" />
+            ) : (
+              "Save"
+            )}
           </button>
           <button
             type="button"

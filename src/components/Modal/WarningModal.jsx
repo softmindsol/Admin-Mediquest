@@ -1,5 +1,7 @@
+import { useSelector } from "react-redux";
 import { CloseSvg, WarningSvg } from "../../assets/images/svg";
 import Button from "../Button";
+import Loader from "../Loader";
 
 const WarningModal = ({
   closeModal,
@@ -8,6 +10,8 @@ const WarningModal = ({
   successText = "Yes, delete it",
   onClick,
 }) => {
+  const { isLoading = false } = useSelector((state) => state?.questions || {});
+
   return (
     <div className=" z-999999">
       <div className="flex justify-end px-3 pt-4">
@@ -35,11 +39,19 @@ const WarningModal = ({
         >
           No, cancel
         </Button>
+
         <Button
-          className="text-sm text-[white] py-2.5 px-3 bg-red-500 rounded-md hover:bg-[#FF0000] font-bold hover:text-white"
+          className="text-sm flex justify-center items-center text-[white] py-2.5 px-3 bg-red-500 rounded-md hover:bg-[#FF0000] font-bold hover:text-white"
           onClick={onClick}
         >
-          {successText}
+          {isLoading ? (
+            <>
+              <span className="">Loading...</span>
+              <Loader className="w-4 h-4 border-white border-solid rounded-full animate-spin-1.5 border-t-transparent border-2" />
+            </>
+          ) : (
+            successText
+          )}
         </Button>
       </div>
     </div>

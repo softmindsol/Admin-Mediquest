@@ -10,8 +10,7 @@ import {
   editQuestion,
   getQuestion,
 } from "../../store/features/questions/question.service";
-
-
+import { modulesArray } from "./constant";
 
 const EditQuestions = () => {
   const [modifiedOptions, setModifiedOptions] = useState([]);
@@ -23,13 +22,6 @@ const EditQuestions = () => {
     metadata: metaData = {},
   } = useSelector((state) => state?.questions?.documentQuestions) || {};
   const [image, setImage] = useState(null);
-
-  // const handleImageUpload = (event) => {
-  //   const file = event.target.files[0];
-  //   if (file) {
-  //     setImage(URL.createObjectURL(file));
-  //   }
-  // };
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -54,10 +46,11 @@ const EditQuestions = () => {
   const [searchPageNo, setSearchPageNo] = useState();
   const [image_url, setImageUrl] = useState("");
   const [isDeployed, setIsDeployed] = useState(questions?.deploy);
-
+  const [isLoading, setLoading] = useState(false);
   useEffect(() => {
     const fetchQuestion = async () => {
       try {
+        setLoading(true);
         const res = await dispatch(
           getQuestion({
             documentId,
@@ -65,6 +58,7 @@ const EditQuestions = () => {
             pageNo: searchParams.get("pageNo"),
           })
         );
+        setLoading(false);
 
         setSearchPageNo(res?.payload?.pageNo);
         setImage(res?.payload?.question?.image_url);
@@ -154,7 +148,7 @@ const EditQuestions = () => {
         <button
           onClick={handlePrev}
           className="px-4 py-3 text-gray-500 bg-white border border-[#E9ECEF] rounded"
-          disabled={searchPageNo <= 1}
+          disabled={searchPageNo <= 1 || isLoading}
         >
           &lt; Prev
         </button>
@@ -164,7 +158,7 @@ const EditQuestions = () => {
         <button
           onClick={handleNext}
           className="px-4 py-3 text-gray-500 bg-white border border-[#E9ECEF] rounded"
-          disabled={searchPageNo >= totalQuestions}
+          disabled={searchPageNo >= totalQuestions || isLoading}
         >
           Next &gt;
         </button>
@@ -209,9 +203,22 @@ const EditQuestions = () => {
               className="w-32 px-4 py-3 focus:outline-none border border-[#949494] bg-white rounded-2xl"
             >
               <option value="">Select</option>
+
+              <option value="2021">2014</option>
+              <option value="2021">2015</option>
+              <option value="2021">2016</option>
+              <option value="2021">2017</option>
+              <option value="2021">2018</option>
+
               <option value="2019">2019</option>
               <option value="2020">2020</option>
               <option value="2021">2021</option>
+              <option value="2021">2022</option>
+              <option value="2021">2023</option>
+
+              <option value="2021">2024</option>
+
+              <option value="2021">2025</option>
             </select>
             {formik.touched.exam_year && formik.errors.exam_year && (
               <span className="text-sm text-red-500">
@@ -232,7 +239,9 @@ const EditQuestions = () => {
               className="w-32 px-4 py-3 focus:outline-none border border-[#949494] bg-white rounded-2xl"
             >
               <option value="">Select</option>
-              <option value="Biochimie">Biochimie</option>
+              {modulesArray.map((module) => (
+                <option value={module.value}>{module.name}</option>
+              ))}
             </select>
             {formik.touched.topic && formik.errors.topic && (
               <span className="text-sm text-red-500">
