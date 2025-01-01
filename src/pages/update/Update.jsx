@@ -1,32 +1,83 @@
 import { useFormik } from "formik";
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useSearchParams } from "react-router-dom";
-import * as Yup from "yup";
-import {
-  editQuestion,
-  getAllDocQuestions,
-} from "../../store/features/questions/question.service";
-import DefaultLayout from "../../layouts/DefaultLayout";
-import TextEditor from "../../components/TextEditor";
-import EditQuestion from "../../components/EditQuestion";
+import React, { useState } from "react";
 import toast from "react-hot-toast";
-import Loader from "../../components/Loader";
+import { Link, useLocation } from "react-router-dom";
+import * as Yup from "yup";
+import TextEditor from "../../components/TextEditor";
+import useGetAllDocQuestions from "../../hooks/useGetAllDocQuestions";
+import DefaultLayout from "../../layouts/DefaultLayout";
+import { editQuestion } from "../../store/features/questions/question.service";
 import { modulesArray } from "../editquestions/constant";
+import EditQuestion from "../../components/EditQuestion";
+import useImageUpload from "../../hooks/useUploadImage";
+import { useDispatch } from "react-redux";
+import Loader from "../../components/Loader";
 
 const Update = () => {
+  const location = useLocation();
+  console.log("🚀 ~ Update ~ location:", location.state);
+  const params = location?.state;
+
+  console.log(params, "params");
+
+  const {
+    questions,
+    setQuestionsDetail,
+    questionsDetail,
+    isLoading,
+    updateParams,
+    params: queryParams,
+    setQuestions,
+  } = useGetAllDocQuestions(params);
+  const dispatch = useDispatch();
+
+  const currentQuestion = questions[questionsDetail.currentQuestion];
+  const CURRENT_QUESTION = questionsDetail?.currentQuestion + 1;
+  const TOTAL_QUESTIONS = questionsDetail?.totalQuestions;
+  const isDeployed = currentQuestion?.content?.questions?.deploy;
+  console.log("🚀 ~ Update ~ isDeployed:", isDeployed);
+  const IMAGE =
+    currentQuestion?.content?.questions?.image_url !== null
+      ? currentQuestion?.content?.questions?.image_url
+      : "";
+  console.log(IMAGE, "image");
+
+  console.log("🚀 ~ Update ~ currentQuestion:", currentQuestion);
+
+  const handleNext = () => {
+    const nextIndex = questionsDetail.currentQuestion + 1;
+
+    const isCloseToEnd = !questions[nextIndex + 3];
+
+    if (nextIndex < questionsDetail.totalQuestions) {
+      setQuestionsDetail((prev) => ({
+        ...prev,
+        currentQuestion: nextIndex,
+      }));
+
+      if (isCloseToEnd && nextIndex + 3 < questionsDetail.totalQuestions) {
+        const nextPage = queryParams.pageNo + 1;
+        updateParams({ pageNo: nextPage });
+      }
+    }
+  };
+
+  const handlePrev = () => {
+    const prevIndex = questionsDetail.currentQuestion - 1;
+    if (questionsDetail.currentQuestion > 0) {
+      setQuestionsDetail((prev) => ({
+        ...prev,
+        currentQuestion: prevIndex,
+      }));
+    }
+  };
+
   const [loading, setLoading] = useState(false);
   const [modifiedOptions, setModifiedOptions] = useState([]);
-  const [selectedCorrectAnswers, setSelectedCorrectAnswers] = useState([]);
-  const {
-    totalQuestions = 0,
-    documentId,
-    questions = {},
-    metadata: metaData = {},
-  } = useSelector((state) => state?.questions?.documentQuestions) || {};
-  const [image, setImage] = useState(null);
+  console.log("modifiedOptions", modifiedOptions);
 
-  const { isLoading } = useSelector((state) => state?.questions || {});
+  const [selectedCorrectAnswers, setSelectedCorrectAnswers] = useState([]);
+  console.log("🚀 ~ Update ~ selectedCorrectAnswers:", selectedCorrectAnswers);
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -35,84 +86,78 @@ const Update = () => {
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
-        setImage(reader.result);
-        setImageUrl("");
+        const questionId = currentQuestion?._id;
+        setQuestions((prevQuestions) =>
+          prevQuestions.map((question) =>
+            question._id === questionId
+              ? {
+                  ...question,
+                  content: {
+                    ...question.content,
+                    questions: {
+                      ...question.content.questions,
+                      image_url: reader.result,
+                    },
+                  },
+                }
+              : question
+          )
+        );
       };
       reader.readAsDataURL(file);
     }
   };
 
+  console.log(questions);
+
+  const handleChangeDeploy = (questionId) => {
+    setQuestions((prevQuestions) =>
+      prevQuestions.map((question) =>
+        question._id === questionId
+          ? {
+              ...question,
+              content: {
+                ...question.content,
+                questions: {
+                  ...question.content.questions,
+                  deploy: !question.content.questions.deploy,
+                },
+              },
+            }
+          : question
+      )
+    );
+  };
+
+  console.log(currentQuestion?.content?.questions?.deploy, "deploy");
+  console.log(currentQuestion?._id, "id");
+
   const handleRemoveImage = () => {
-    setImage(null);
-    setImageUrl("");
-  };
-  const dispatch = useDispatch();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [pageNo, setPageNo] = useState(1);
-  const [image_url, setImageUrl] = useState("");
-  const [isDeployed, setIsDeployed] = useState(questions?.deploy);
-
-  useEffect(() => {
-    // Check if pageNo is present in the search params
-    const currentPageNo = searchParams.get("pageNo");
-    if (!currentPageNo) {
-      // If not present, set pageNo to 1
-      setPageNo(1);
-      setSearchParams({ pageNo: 1 });
-    } else {
-      setPageNo(Number(currentPageNo));
-    }
-  }, [searchParams, setSearchParams]);
-
-  useEffect(() => {
-    const fetchQuestion = async () => {
-      try {
-        const res = await dispatch(
-          getAllDocQuestions({
-            pageNo: searchParams.get("pageNo") || 1,
-          })
-        );
-
-        if (res.type === "getAllDocQuestions/fulfilled") {
-          setImage(res?.payload?.allQuestions?.image_url);
-          setImageUrl(res?.payload?.allQuestions?.image_url);
-        }
-      } catch (error) {
-        console.error("Error fetching question: ", error);
-      }
-    };
-
-    fetchQuestion();
-  }, [dispatch, searchParams]);
-
-  useEffect(() => {
-    if (questions && questions.deploy !== undefined) {
-      setIsDeployed(questions.deploy);
-    }
-  }, [questions]);
-
-  const handlePrev = () => {
-    if (pageNo > 1) {
-      const newPageNo = pageNo - 1;
-      setPageNo(newPageNo);
-      setSearchParams({ pageNo: newPageNo });
-    }
-  };
-
-  const handleNext = () => {
-    if (pageNo < totalQuestions) {
-      const newPageNo = pageNo + 1;
-      setPageNo(newPageNo);
-      setSearchParams({ pageNo: newPageNo });
-    }
+    const questionId = currentQuestion._id;
+    setQuestions((prevQuestions) =>
+      prevQuestions.map((question) =>
+        question._id === questionId
+          ? {
+              ...question,
+              content: {
+                ...question.content,
+                questions: {
+                  ...question.content.questions,
+                  image_url: null,
+                },
+              },
+            }
+          : question
+      )
+    );
   };
 
   const formik = useFormik({
     initialValues: {
-      question: questions?.question || "",
-      exam_variable: metaData?.exam_variable || "",
-      exam_year: metaData?.exam_year || "",
-      topic: metaData?.topic || "",
+      question: currentQuestion?.content?.questions?.question || "",
+      exam_variable: currentQuestion?.metadata?.exam_variable || "",
+      semester: currentQuestion?.metadata?.semester || "",
+      topic: currentQuestion?.metadata?.topic || "",
     },
     validationSchema: Yup.object({
       question: Yup.string().required("Question is required"),
@@ -122,24 +167,52 @@ const Update = () => {
     onSubmit: async (values) => {
       const updatedData = {
         ...values,
-        deploy: isDeployed,
+        deploy: currentQuestion?.content?.questions?.deploy,
         options: modifiedOptions,
-        image_url,
-        image,
+        image_url: currentQuestion?.content?.questions?.image_url,
         correct_answers: selectedCorrectAnswers,
       };
 
       try {
         setLoading(true);
+        const questionId = currentQuestion?._id;
         const res = await dispatch(
           editQuestion({
-            documentId,
-            questionId: questions?._id,
-            image_url: "",
-            image,
+            documentId: currentQuestion?.documentId,
+            questionId: questionId,
             data: updatedData,
           })
         );
+
+        console.log("nyc", res);
+
+        if (res.type === "editQuestion/fulfilled") {
+          setQuestions((prevQuestions) =>
+            prevQuestions.map((question) =>
+              question._id === questionId
+                ? {
+                    ...question,
+                    metadata: {
+                      ...question.metadata,
+                      topic: values.topic,
+                      semester: values.semester,
+                      exam_variable: values.exam_variable,
+                    },
+                    content: {
+                      ...question.content,
+                      questions: {
+                        ...question.content.questions,
+                        question: values.question,
+                        options: modifiedOptions,
+                        correct_answers: selectedCorrectAnswers,
+                        image_url: res?.payload?.data?.image_url,
+                      },
+                    },
+                  }
+                : question
+            )
+          );
+        }
         setLoading(false);
       } catch (error) {
         console.error("Error submitting edit: ", error);
@@ -162,29 +235,29 @@ const Update = () => {
         <button
           onClick={handlePrev}
           className="px-4 py-3 text-gray-500 bg-white border border-[#E9ECEF] rounded"
-          disabled={pageNo <= 1 || isLoading}
+          disabled={params.pageNo <= 1 || isLoading}
         >
           &lt; Prev
         </button>
         <div className="px-4 py-3 bg-[#3A57E8] text-white border border-[#7749F8] rounded">
-          {pageNo} of {totalQuestions}
+          {CURRENT_QUESTION} of {TOTAL_QUESTIONS}
         </div>
         <button
           onClick={handleNext}
           className="px-4 py-3 text-gray-500 bg-white border border-[#E9ECEF] rounded"
-          disabled={pageNo >= totalQuestions || isLoading}
+          disabled={params?.pageNo >= TOTAL_QUESTIONS || isLoading}
         >
           Next &gt;
         </button>
       </div>
       <div className="flex flex-wrap items-center justify-between gap-3 mt-6 mb-10">
         <div className="flex flex-wrap items-center space-x-2 lg:flex-row">
-          {/* Exam Variable Dropdown */}
           <div>
             <label className="block text-[#211C1B] lg:font-bold font-semibold mb-1">
               Exam Var
             </label>
             <select
+              disabled={true}
               name="exam_variable"
               value={formik.values.exam_variable}
               onChange={formik.handleChange}
@@ -204,48 +277,40 @@ const Update = () => {
               </span>
             )}
           </div>
-          {/* Year Dropdown */}
           <div>
             <label className="block text-[#211C1B] lg:font-bold font-semibold mb-1">
-              Year
+              Semester
             </label>
             <select
-              name="exam_year"
-              value={formik.values.exam_year}
+              disabled={true}
+              name="semester"
+              value={formik.values.semester}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               className="w-32 px-4 py-3 focus:outline-none border border-[#949494] bg-white rounded-2xl"
             >
               <option value="">Select</option>
 
-              <option value="2014">2014</option>
-              <option value="2015">2015</option>
-              <option value="2016">2016</option>
-              <option value="2017">2017</option>
-              <option value="2018">2018</option>
-
-              <option value="2019">2019</option>
-              <option value="2020">2020</option>
-              <option value="2021">2021</option>
-              <option value="2022">2022</option>
-              <option value="2023">2023</option>
-
-              <option value="2024">2024</option>
-
-              <option value="2025">2025</option>
+              {Array.from({ length: 10 }, (_, index) => (
+                <option key={`S${index + 1}`} value={`S${index + 1}`}>
+                  S{index + 1}
+                </option>
+              ))}
             </select>
-            {formik.touched.exam_year && formik.errors.exam_year && (
+            {formik.touched.exam_year && formik.errors.semester && (
               <span className="text-sm text-red-500">
-                {formik.errors.exam_year}
+                {formik.errors.semester}
               </span>
             )}
           </div>
-          {/* Topic Dropdown */}
+
           <div>
             <label className="block text-[#211C1B] lg:font-bold font-semibold mb-1">
               Topic
             </label>
             <select
+              disabled={true}
+              key={formik.values.topic}
               name="topic"
               value={formik.values.topic}
               onChange={formik.handleChange}
@@ -265,7 +330,7 @@ const Update = () => {
           </div>
         </div>
 
-        <div className="flex items-center space-x-4">
+        <div className="flex items-end mt-6 space-x-4">
           <button
             type="button"
             disabled={loading}
@@ -283,7 +348,7 @@ const Update = () => {
             className={`px-6 py-2 font-semibold text-white rounded-2xl ${
               isDeployed ? "bg-red-500" : "bg-[#007AFF]"
             }`}
-            onClick={() => setIsDeployed(!isDeployed)}
+            onClick={() => handleChangeDeploy(currentQuestion?._id)}
           >
             {isDeployed ? "Undeploy" : "Deploy"}
           </button>
@@ -312,9 +377,9 @@ const Update = () => {
       </div>
       <div className="flex items-end justify-between p-4">
         <div className="lg:w-[60%] flex justify-end ite w-full">
-          {image ? (
+          {IMAGE ? (
             <img
-              src={image}
+              src={IMAGE}
               alt="Uploaded"
               className="object-contain h-64 w-100"
             />
@@ -341,6 +406,7 @@ const Update = () => {
         </div>
       </div>
       <EditQuestion
+        questions={currentQuestion}
         modifiedOptions={modifiedOptions}
         setModifiedOptions={setModifiedOptions}
         selectedCorrectAnswers={selectedCorrectAnswers}

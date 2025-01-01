@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
   deleteQuestion,
-  getAllDocQuestions,
+  // getAllDocQuestions,
   getAllQuestions,
   getQuestion,
 } from "./question.service";
@@ -46,19 +46,19 @@ const questionSlice = createSlice({
       .addCase(getQuestion.rejected, (state, action) => {
         state.error = action.payload.error;
       })
-      .addCase(getAllDocQuestions.pending, (state, _) => {
-        state.isLoading = true;
-      })
-      .addCase(getAllDocQuestions.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.documentQuestions.questions = action.payload?.allQuestions;
-        state.documentQuestions.totalQuestions = action.payload?.totalQuestions;
-        state.documentQuestions.metadata = action.payload?.metadata;
-        state.documentQuestions.documentId = action.payload?.documentId;
-      })
-      .addCase(getAllDocQuestions.rejected, (state, action) => {
-        state.error = action.payload.error;
-      })
+      // .addCase(getAllDocQuestions.pending, (state, _) => {
+      //   state.isLoading = true;
+      // })
+      // .addCase(getAllDocQuestions.fulfilled, (state, action) => {
+      //   state.isLoading = false;
+      //   state.documentQuestions.questions = action.payload?.allQuestions;
+      //   state.documentQuestions.totalQuestions = action.payload?.totalQuestions;
+      //   state.documentQuestions.metadata = action.payload?.metadata;
+      //   state.documentQuestions.documentId = action.payload?.documentId;
+      // })
+      // .addCase(getAllDocQuestions.rejected, (state, action) => {
+      //   state.error = action.payload.error;
+      // })
       .addCase(deleteQuestion.pending, (state) => {
         state.isLoading = true;
       })

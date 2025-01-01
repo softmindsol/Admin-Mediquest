@@ -43,7 +43,6 @@ export const getAllQuestions = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      // Constructing the params object conditionally
       const params = {
         ...(topic && { topic }),
         ...(semester && { semester }),
@@ -109,6 +108,7 @@ export const editQuestion = createAsyncThunk(
         data
       );
       toast.success(response?.data?.message);
+      
       return response?.data;
     } catch (error) {
       error?.response?.data?.error && toast.error(error?.response?.data?.error);
@@ -157,26 +157,26 @@ export const getQuestion = createAsyncThunk(
   }
 );
 
-export const getAllDocQuestions = createAsyncThunk(
-  "getAllDocQuestions",
-  async ({ pageNo }, { rejectWithValue }) => {
-    const params = {};
+// export const getAllDocQuestions = createAsyncThunk(
+//   "getAllDocQuestions",
+//   async ({ pageNo }, { rejectWithValue }) => {
+//     const params = {};
 
-    if (pageNo) {
-      params.pageNo = pageNo;
-    }
+//     if (pageNo) {
+//       params.pageNo = pageNo;
+//     }
 
-    try {
-      const response = await axiosWithToken.get(
-        `/questions/get-all-questions`,
-        {
-          params,
-        }
-      );
+//     try {
+//       const response = await axiosWithToken.get(
+//         `/questions/get-all-questions`,
+//         {
+//           params,
+//         }
+//       );
 
-      return response?.data?.data;
-    } catch (error) {
-      return rejectWithValue(error);
-    }
-  }
-);
+//       return response?.data?.data;
+//     } catch (error) {
+//       return rejectWithValue(error);
+//     }
+//   }
+// );

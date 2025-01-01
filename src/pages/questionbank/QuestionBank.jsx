@@ -1,15 +1,15 @@
-import React, { useEffect } from "react";
+import React from "react";
+import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
 import { Link, useSearchParams } from "react-router-dom";
-import DefaultLayout from "../../layouts/DefaultLayout";
-import Table from "../../components/table/Table";
 import Filter from "../../components/Filter";
+import Table from "../../components/table/Table";
+import useDebouncedEffect from "../../hooks/useDebounce";
+import DefaultLayout from "../../layouts/DefaultLayout";
 import {
   getAllQuestions,
   uploadQuestions,
 } from "../../store/features/questions/question.service";
-import { useDispatch } from "react-redux";
-import useDebouncedEffect from "../../hooks/useDebounce";
-import toast from "react-hot-toast";
 
 const QuestionBank = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -23,6 +23,9 @@ const QuestionBank = () => {
     [searchParams],
     500
   );
+
+  const params = Object.fromEntries(searchParams.entries());
+  console.log("🚀 ~ QuestionBank ~ params:", params);
 
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
@@ -61,6 +64,14 @@ const QuestionBank = () => {
     });
   };
 
+  const filteredParams = { ...params };
+  delete filteredParams?.pageNo;
+  delete filteredParams?.search;
+  delete filteredParams?.deployed;
+  delete filteredParams?.startDate;
+  delete filteredParams?.endDate;
+  delete filteredParams?.exam_variable;
+
   return (
     <>
       <DefaultLayout>
@@ -74,7 +85,7 @@ const QuestionBank = () => {
               onChange={handleFileUpload}
             />
           </label>
-          <Link to="/update-questions">
+          <Link to="/update-questions" state={filteredParams}>
             <button className="bg-[#007AFF] text-white text-title-p font-semibold py-2 px-4 rounded-md">
               Switch to Individual view
             </button>

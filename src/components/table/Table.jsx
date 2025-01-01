@@ -13,7 +13,6 @@ import Modal from "../Modal";
 import WarningModal from "../Modal/WarningModal";
 import Pagination from "../Pagination";
 
-// Updated columns based on the screenshot design
 const columns = [
   { name: "_id", label: "ID" },
   { name: "question", label: "Question" },
@@ -101,10 +100,7 @@ const Table = ({ setParams, params }) => {
                       <Link
                         to={`/edit-question/${row?.documentId}/${row?.questionId}`}
                       >
-                        <button
-                          // onClick={openEditModal}
-                          className="font-medium cursor-pointer text-[#282F5A] p-2 rounded-full hover:bg-[#282F5A1F] transition-all duration-300"
-                        >
+                        <button className="font-medium cursor-pointer text-[#282F5A] p-2 rounded-full hover:bg-[#282F5A1F] transition-all duration-300">
                           <GrEdit size={20} className="text-[#ff9a69]" />
                         </button>
                       </Link>

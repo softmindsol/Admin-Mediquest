@@ -6,12 +6,17 @@ import {
   getAllQuestions,
   uploadQuestions,
 } from "../../store/features/questions/question.service";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import useDebouncedEffect from "../../hooks/useDebounce";
 
 const Home = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const dispatch = useDispatch();
+
+  const { questions: data, isLoading } = useSelector(
+    (state) => state?.questions
+  );
+  console.log("--data", data);
 
   useDebouncedEffect(
     () => {
@@ -29,12 +34,7 @@ const Home = () => {
       reader.onload = async (e) => {
         try {
           const json = JSON.parse(e.target.result);
-          // const formData = new FormData();
-          // formData.append(
-          //   "question",
-          //   new Blob([JSON.stringify(json)], { type: "application/json" }),
-          //   file.name
-          // );
+
           await dispatch(uploadQuestions(json));
         } catch (err) {
           console.error("Invalid JSON file", err);

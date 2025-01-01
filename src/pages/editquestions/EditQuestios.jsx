@@ -144,10 +144,10 @@ const EditQuestions = () => {
           GO BACK
         </Link>
       </div>
-      <div className="flex items-center justify-center mt-16 space-x-4">
+      <div className="flex items-center justify-center mt-16 md:space-x-[172px]">
         <button
           onClick={handlePrev}
-          className="px-4 py-3 text-gray-500 bg-white border border-[#E9ECEF] rounded"
+          className="px-4 py-3 text-[#6C757D] bg-white border border-[#E9ECEF] rounded"
           disabled={searchPageNo <= 1 || isLoading}
         >
           &lt; Prev
@@ -157,7 +157,7 @@ const EditQuestions = () => {
         </div>
         <button
           onClick={handleNext}
-          className="px-4 py-3 text-gray-500 bg-white border border-[#E9ECEF] rounded"
+          className="px-4 py-3 text-[#6C757D] bg-white border border-[#E9ECEF] rounded"
           disabled={searchPageNo >= totalQuestions || isLoading}
         >
           Next &gt;
@@ -167,7 +167,7 @@ const EditQuestions = () => {
         <div className="flex flex-wrap items-center space-x-2 lg:flex-row">
           {/* Exam Variable Dropdown */}
           <div>
-            <label className="block text-[#211C1B] lg:font-bold font-semibold mb-1">
+            <label className="block text-[#211C1B] text-sm lg:font-bold font-semibold mb-1">
               Exam Var
             </label>
             <select
@@ -190,9 +190,8 @@ const EditQuestions = () => {
               </span>
             )}
           </div>
-          {/* Year Dropdown */}
           <div>
-            <label className="block text-[#211C1B] lg:font-bold font-semibold mb-1">
+            <label className="block text-[#211C1B] text-sm lg:font-bold font-semibold mb-1">
               Year
             </label>
             <select
@@ -225,7 +224,7 @@ const EditQuestions = () => {
             )}
           </div>
           <div>
-            <label className="block text-[#211C1B] lg:font-bold font-semibold mb-1">
+            <label className="block text-[#211C1B] lg:font-bold text-sm font-semibold mb-1">
               Topic
             </label>
             <select
@@ -248,17 +247,17 @@ const EditQuestions = () => {
           </div>
         </div>
 
-        <div className="flex items-center space-x-4">
+        <div className="flex mt-6 space-x-4">
           <button
             type="button"
-            className="px-6 py-2 text-white bg-[#007AFF] font-semibold rounded-2xl"
+            className="px-6 py-2 text-white bg-[#007AFF] font-semibold rounded-[4px]"
             onClick={formik.handleSubmit}
           >
             Save
           </button>
           <button
             type="button"
-            className={`px-6 py-2 font-semibold text-white rounded-2xl ${
+            className={`px-6 py-2 font-semibold text-white rounded-[4px] ${
               isDeployed ? "bg-red-500" : "bg-[#007AFF]"
             }`}
             onClick={() => setIsDeployed(!isDeployed)}
@@ -267,11 +266,15 @@ const EditQuestions = () => {
           </button>
         </div>
       </div>
-      <div className="relative px-7">
+      <div className="relative">
         <form onSubmit={formik.handleSubmit}>
           <div className="mb-6">
             <TextEditor
-              label="Question*"
+              label={
+                <p className="font-bold">
+                  Question <span className="text-red-600">*</span>
+                </p>
+              }
               id="question"
               required={true}
               name="question"
@@ -323,6 +326,16 @@ const EditQuestions = () => {
         selectedCorrectAnswers={selectedCorrectAnswers}
         setSelectedCorrectAnswers={setSelectedCorrectAnswers}
       />
+
+      <div className="flex justify-end pb-12">
+        <button
+          type="button"
+          className="px-6 py-2 text-white bg-[#007AFF] font-semibold rounded-[4px]"
+          onClick={formik.handleSubmit}
+        >
+          Save
+        </button>
+      </div>
     </DefaultLayout>
   );
 };

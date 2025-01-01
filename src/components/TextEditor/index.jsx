@@ -1,7 +1,7 @@
 import { forwardRef } from "react";
 import "react-quill/dist/quill.snow.css";
 import ReactQuill, { Quill } from "react-quill";
-
+import "../TextEditor/style.css";
 const Block = Quill.import("blots/block");
 class Blockquote extends Block {
   static create(value) {
@@ -115,9 +115,10 @@ const TextEditor = (
           height: `${height || 200}px`,
           marginBottom: "5px",
           backgroundColor: "#ffffff", // White background
+
           borderColor: "#0000006B", // Semi-transparent black border
           borderWidth: "1px",
-          borderRadius: "16px", // Adding some border-radius for smooth edges
+          borderRadius: "4px", // Adding some border-radius for smooth edges
         }}
       />
     </div>
