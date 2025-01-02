@@ -192,6 +192,8 @@ const Update = () => {
             .filter((value) => value != "").length === 0
         ) {
           setError({ ...error, optionError: "At least add one option" });
+
+          return;
         } else {
           setError({
             ...error,
@@ -242,31 +244,6 @@ const Update = () => {
     },
     enableReinitialize: true,
   });
-
-  // const validateForm = () => {
-  //   const errors = {};
-
-  //   if (!formik.values.question || formik.values.question.trim() === "") {
-  //     errors.question = "Question is required";
-  //   }
-
-  //   if (!modifiedOptions || modifiedOptions.length === 0) {
-  //     errors.options = "Options are required";
-  //   } else {
-  //     const hasEmptyOption = modifiedOptions.some(
-  //       (option) => !option || option.trim() === ""
-  //     );
-  //     if (hasEmptyOption) {
-  //       errors.options = "All options must be filled out";
-  //     }
-  //   }
-
-  //   if (!selectedCorrectAnswers || selectedCorrectAnswers.length === 0) {
-  //     errors.correctAnswers = "At least one correct answer must be selected";
-  //   }
-
-  //   return errors;
-  // };
 
 
   return (
