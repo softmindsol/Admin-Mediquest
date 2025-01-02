@@ -31,41 +31,7 @@ const EditQuestion = ({
       return updatedOptions;
     });
   };
-  const stripHtmlTags = (html) => {
-    const div = document.createElement("div");
-    div.innerHTML = html;
-    return div.textContent || div.innerText || "";
-  };
-  // const handleOptionChange = (index, content) => {
-  //   setModifiedOptions((prevOptions) => {
-  //     const updatedOptions = [...prevOptions];
-  //     updatedOptions[index] = content;
-  //     return updatedOptions;
-  //   });
-
-  //   console.log("working", modifiedOptions);
-
-  //   const nonEmptyOptionsCount = modifiedOptions
-  //     ?.map((option) => stripHtmlTags(option).trim())
-  //     .filter((value) => value !== "").length;
-
-  //   console.log(nonEmptyOptionsCount, "error");
-
-  //   if (nonEmptyOptionsCount > 0) {
-  //     setError((prevError) => ({
-  //       ...prevError,
-  //       optionError: "",
-  //     }));
-  //   }
-  // };
-
-  // const handleCorrectAnswerChange = (id) => {
-  //   setSelectedCorrectAnswers((prevAnswers) => {
-  //     return prevAnswers.includes(id)
-  //       ? prevAnswers.filter((answer) => answer !== id)
-  //       : [...prevAnswers, id];
-  //   });
-  // };
+ 
   const handleCorrectAnswerChange = (id) => {
     setSelectedCorrectAnswers((prevAnswers) => {
       const updatedAnswers = prevAnswers.includes(id)

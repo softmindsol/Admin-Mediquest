@@ -30,18 +30,15 @@ const Update = () => {
   const CURRENT_QUESTION = questionsDetail?.currentQuestion + 1;
   const TOTAL_QUESTIONS = questionsDetail?.totalQuestions;
   const isDeployed = currentQuestion?.content?.questions?.deploy;
-  console.log("🚀 ~ Update ~ isDeployed:", isDeployed);
   const IMAGE =
     currentQuestion?.content?.questions?.image_url !== null
       ? currentQuestion?.content?.questions?.image_url
       : "";
-  console.log(IMAGE, "image");
 
   const [error, setError] = useState({
     correctOptionError: "",
     optionError: "",
   });
-  console.log("🚀 ~ Update ~ currentQuestion:", currentQuestion);
 
   const handleNext = () => {
     const nextIndex = questionsDetail.currentQuestion + 1;
@@ -73,10 +70,8 @@ const Update = () => {
 
   const [loading, setLoading] = useState(false);
   const [modifiedOptions, setModifiedOptions] = useState([]);
-  console.log("modifiedOptions", modifiedOptions);
 
   const [selectedCorrectAnswers, setSelectedCorrectAnswers] = useState([]);
-  console.log("🚀 ~ Update ~ selectedCorrectAnswers:", selectedCorrectAnswers);
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -107,7 +102,6 @@ const Update = () => {
     }
   };
 
-  console.log(questions);
 
   const handleChangeDeploy = (questionId) => {
     setQuestions((prevQuestions) =>
@@ -128,8 +122,6 @@ const Update = () => {
     );
   };
 
-  console.log(currentQuestion?.content?.questions?.deploy, "deploy");
-  console.log(currentQuestion?._id, "id");
 
   const handleRemoveImage = () => {
     const questionId = currentQuestion._id;
@@ -157,7 +149,6 @@ const Update = () => {
     return div.textContent || div.innerText || "";
   };
 
-  console.log("error", error);
 
   const formik = useFormik({
     initialValues: {
@@ -208,7 +199,6 @@ const Update = () => {
           });
         }
         setLoading(true);
-        console.log("selectedCorrectAnswers", selectedCorrectAnswers);
         const questionId = currentQuestion?._id;
         const res = await dispatch(
           editQuestion({
@@ -218,7 +208,6 @@ const Update = () => {
           })
         );
 
-        console.log("nyc", res);
 
         if (res.type === "editQuestion/fulfilled") {
           setQuestions((prevQuestions) =>
@@ -249,7 +238,6 @@ const Update = () => {
         }
         setLoading(false);
       } catch (error) {
-        console.error("Error submitting edit: ", error);
       }
     },
     enableReinitialize: true,
@@ -280,8 +268,6 @@ const Update = () => {
   //   return errors;
   // };
 
-  console.log("error", formik.errors);
-  console.log("values", formik.values);
 
   return (
     <DefaultLayout>
