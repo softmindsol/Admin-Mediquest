@@ -1,25 +1,20 @@
 import { useFormik } from "formik";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import * as Yup from "yup";
+import EditQuestion from "../../components/EditQuestion";
+import Loader from "../../components/Loader";
 import TextEditor from "../../components/TextEditor";
 import useGetAllDocQuestions from "../../hooks/useGetAllDocQuestions";
 import DefaultLayout from "../../layouts/DefaultLayout";
 import { editQuestion } from "../../store/features/questions/question.service";
 import { modulesArray } from "../editquestions/constant";
-import EditQuestion from "../../components/EditQuestion";
-import useImageUpload from "../../hooks/useUploadImage";
-import { useDispatch } from "react-redux";
-import Loader from "../../components/Loader";
 
 const Update = () => {
   const location = useLocation();
-  console.log("🚀 ~ Update ~ location:", location.state);
   const params = location?.state;
-
-  console.log(params, "params");
-
   const {
     questions,
     setQuestionsDetail,
@@ -42,6 +37,10 @@ const Update = () => {
       : "";
   console.log(IMAGE, "image");
 
+  const [error, setError] = useState({
+    correctOptionError: "",
+    optionError: "",
+  });
   console.log("🚀 ~ Update ~ currentQuestion:", currentQuestion);
 
   const handleNext = () => {
@@ -152,6 +151,14 @@ const Update = () => {
     );
   };
 
+  const stripHtmlTags = (html) => {
+    const div = document.createElement("div");
+    div.innerHTML = html;
+    return div.textContent || div.innerText || "";
+  };
+
+  console.log("error", error);
+
   const formik = useFormik({
     initialValues: {
       question: currentQuestion?.content?.questions?.question || "",
@@ -160,7 +167,13 @@ const Update = () => {
       topic: currentQuestion?.metadata?.topic || "",
     },
     validationSchema: Yup.object({
-      question: Yup.string().required("Question is required"),
+      question: Yup.string()
+        .test(
+          "is-valid-question",
+          "Question is required",
+          (value) => !!stripHtmlTags(value).trim()
+        )
+        .required("Question is required"),
       exam_variable: Yup.string().required("Exam variable is required"),
       topic: Yup.string().required("Topic is required"),
     }),
@@ -174,7 +187,28 @@ const Update = () => {
       };
 
       try {
+        if (selectedCorrectAnswers.length === 0) {
+          setError({
+            ...error,
+            correctOptionError: "At least one correct answer must be selected",
+          });
+          return;
+        }
+
+        if (
+          modifiedOptions
+            ?.map((option) => stripHtmlTags(option).trim())
+            .filter((value) => value != "").length === 0
+        ) {
+          setError({ ...error, optionError: "At least add one option" });
+        } else {
+          setError({
+            ...error,
+            optionError: "",
+          });
+        }
         setLoading(true);
+        console.log("selectedCorrectAnswers", selectedCorrectAnswers);
         const questionId = currentQuestion?._id;
         const res = await dispatch(
           editQuestion({
@@ -220,6 +254,34 @@ const Update = () => {
     },
     enableReinitialize: true,
   });
+
+  // const validateForm = () => {
+  //   const errors = {};
+
+  //   if (!formik.values.question || formik.values.question.trim() === "") {
+  //     errors.question = "Question is required";
+  //   }
+
+  //   if (!modifiedOptions || modifiedOptions.length === 0) {
+  //     errors.options = "Options are required";
+  //   } else {
+  //     const hasEmptyOption = modifiedOptions.some(
+  //       (option) => !option || option.trim() === ""
+  //     );
+  //     if (hasEmptyOption) {
+  //       errors.options = "All options must be filled out";
+  //     }
+  //   }
+
+  //   if (!selectedCorrectAnswers || selectedCorrectAnswers.length === 0) {
+  //     errors.correctAnswers = "At least one correct answer must be selected";
+  //   }
+
+  //   return errors;
+  // };
+
+  console.log("error", formik.errors);
+  console.log("values", formik.values);
 
   return (
     <DefaultLayout>
@@ -406,6 +468,8 @@ const Update = () => {
         </div>
       </div>
       <EditQuestion
+        setError={setError}
+        error={error}
         questions={currentQuestion}
         modifiedOptions={modifiedOptions}
         setModifiedOptions={setModifiedOptions}

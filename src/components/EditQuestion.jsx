@@ -3,13 +3,13 @@ import TextEditor from "./TextEditor";
 
 const EditQuestion = ({
   modifiedOptions,
+  setError,
+  error,
   questions,
   setModifiedOptions,
   selectedCorrectAnswers,
   setSelectedCorrectAnswers,
 }) => {
-  console.log("🚀 ~ currentQuestion:", questions);
-
   const { options = [], correct_answers = [] } =
     questions?.content?.questions || {};
 
@@ -31,12 +31,55 @@ const EditQuestion = ({
       return updatedOptions;
     });
   };
+  const stripHtmlTags = (html) => {
+    const div = document.createElement("div");
+    div.innerHTML = html;
+    return div.textContent || div.innerText || "";
+  };
+  // const handleOptionChange = (index, content) => {
+  //   setModifiedOptions((prevOptions) => {
+  //     const updatedOptions = [...prevOptions];
+  //     updatedOptions[index] = content;
+  //     return updatedOptions;
+  //   });
 
+  //   console.log("working", modifiedOptions);
+
+  //   const nonEmptyOptionsCount = modifiedOptions
+  //     ?.map((option) => stripHtmlTags(option).trim())
+  //     .filter((value) => value !== "").length;
+
+  //   console.log(nonEmptyOptionsCount, "error");
+
+  //   if (nonEmptyOptionsCount > 0) {
+  //     setError((prevError) => ({
+  //       ...prevError,
+  //       optionError: "",
+  //     }));
+  //   }
+  // };
+
+  // const handleCorrectAnswerChange = (id) => {
+  //   setSelectedCorrectAnswers((prevAnswers) => {
+  //     return prevAnswers.includes(id)
+  //       ? prevAnswers.filter((answer) => answer !== id)
+  //       : [...prevAnswers, id];
+  //   });
+  // };
   const handleCorrectAnswerChange = (id) => {
     setSelectedCorrectAnswers((prevAnswers) => {
-      return prevAnswers.includes(id)
+      const updatedAnswers = prevAnswers.includes(id)
         ? prevAnswers.filter((answer) => answer !== id)
         : [...prevAnswers, id];
+
+      if (updatedAnswers.length > 0) {
+        setError((prevError) => ({
+          ...prevError,
+          correctOptionError: "",
+        }));
+      }
+
+      return updatedAnswers;
     });
   };
 
@@ -82,6 +125,16 @@ const EditQuestion = ({
           </div>
         );
       })}
+      {error?.optionError && (
+        <span className="text-sm text-red-500">
+          *Please add at least one option.
+        </span>
+      )}
+      {error?.correctOptionError && (
+        <span className="text-sm text-red-500">
+          *Please select at least one correct answer.
+        </span>
+      )}
     </div>
   );
 };
